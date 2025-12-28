@@ -35,8 +35,8 @@
         }
     </script>
     
-    <!-- External data source with cache buster ?v=2 added to force reload -->
-    <script src="shepherd_mode_datanew.js?v=2"></script>
+    <!-- External data source with cache buster ?v=3 added to force reload -->
+    <script src="shepherd_mode_datanew.js?v=3"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -852,17 +852,25 @@
             border-top: 1px solid #334155;
         }
 
+        /* CRITICAL: Styles to preserve alignment - Font and Whitespace */
         .shepherd-chord-line {
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace; /* Use monospaced font */
+            white-space: pre; /* PRESERVE SPACES */
+            overflow-x: auto; /* Handle long lines with scroll */
+            font-weight: 700;
             color: #4ade80;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0; /* Tighten up spacing with lyric */
             font-size: 1.1rem;
+            line-height: 1.2;
         }
 
         .shepherd-lyric-line {
-            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace; /* Use monospaced font */
+            white-space: pre; /* PRESERVE SPACES */
+            margin-bottom: 1rem;
             font-size: 1.1rem;
             color: #e2e8f0;
+            line-height: 1.2;
         }
 
         /* Search Bar Area */
@@ -2514,7 +2522,7 @@
                 if (line.line && line.line.trim()) {
                     const lineEl = document.createElement('div');
                     lineEl.className = 'shepherd-lyric-line';
-                    lineEl.textContent = line.line.trim();
+                    lineEl.textContent = line.line;
                     lineContainer.appendChild(lineEl);
                     hasContent = true;
                 } else if (!line.chord || line.chord.length === 0) {
