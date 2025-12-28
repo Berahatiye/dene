@@ -35,8 +35,8 @@
         }
     </script>
     
-    <!-- External data source with cache buster ?v=3 added to force reload -->
-    <script src="shepherd_mode_datanew.js?v=3"></script>
+    <!-- External data source with cache buster ?v=4 added to force reload -->
+    <script src="shepherd_mode_datanew.js?v=4"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -765,6 +765,7 @@
             transition: all 0.3s ease;
             display: flex; 
             flex-direction: column; 
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
         
         /* Sticky List Header */
@@ -819,6 +820,7 @@
             width: 65%;
             max-height: 100%;
             overflow-y: auto;
+            overflow-x: hidden; /* FIXED: Removed horizontal scroll on container */
             padding: 1.5rem;
             background-color: #1e293b;
         }
@@ -856,7 +858,7 @@
         .shepherd-chord-line {
             font-family: 'JetBrains Mono', monospace; /* Use monospaced font */
             white-space: pre; /* PRESERVE SPACES */
-            overflow-x: auto; /* Handle long lines with scroll */
+            overflow-x: hidden; /* FIXED: Removed horizontal scroll arrows/bars */
             font-weight: 700;
             color: #4ade80;
             margin-bottom: 0; /* Tighten up spacing with lyric */
@@ -867,6 +869,7 @@
         .shepherd-lyric-line {
             font-family: 'JetBrains Mono', monospace; /* Use monospaced font */
             white-space: pre; /* PRESERVE SPACES */
+            overflow-x: hidden; /* FIXED: Removed horizontal scroll arrows/bars */
             margin-bottom: 1rem;
             font-size: 1.1rem;
             color: #e2e8f0;
