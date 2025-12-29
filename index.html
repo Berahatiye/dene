@@ -451,10 +451,12 @@
             }
         }
 
+        /* --- UPDATED FLOATING ACTION BUTTONS --- */
         #go-to-top-btn {
             position: fixed;
-            bottom: 2px;
-            right: 2px;
+            bottom: 1.5rem; /* ~24px, user requested left & bottom */
+            left: 1.5rem;
+            right: auto; /* Reset right positioning */
             background-color: #a5b4fc;
             color: #0f172a;
             border-radius: 9999px;
@@ -467,12 +469,29 @@
             opacity: 0;
         }
 
-        #go-to-top-btn.visible {
+        #next-playlist-btn {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem; /* User requested "like this just as right arrow" */
+            background-color: #a5b4fc;
+            color: #0f172a;
+            border-radius: 9999px;
+            padding: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 50;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        #go-to-top-btn.visible, #next-playlist-btn.visible {
             transform: scale(1);
             opacity: 1;
         }
 
-        body.full-screen #go-to-top-btn {
+        body.full-screen #go-to-top-btn, 
+        body.full-screen #next-playlist-btn {
             display: none !important;
         }
 
@@ -1137,9 +1156,17 @@
         </div>
     </div>
 
-    <button id="go-to-top-btn" class="p-4 rounded-full shadow-lg transition-transform duration-300" onclick="scrollToTop()">
+    <!-- Modified Go-to-Top / Reset Button (Left Bottom) -->
+    <button id="go-to-top-btn" class="p-4 rounded-full shadow-lg transition-transform duration-300" onclick="scrollToTop()" title="Başa Dön / Sıfırla">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <!-- New Next Playlist Item Button (Right Bottom) -->
+    <button id="next-playlist-btn" class="p-4 rounded-full shadow-lg transition-transform duration-300" onclick="nextInPlaylist()" title="Sıradaki İlahi">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
     </button>
 
@@ -1438,6 +1465,7 @@
         const modalSearchBar = document.getElementById('modal-search-bar');
         const hymnsListContainer = document.getElementById('hymns-list');
         const goToTopBtn = document.getElementById('go-to-top-btn');
+        const nextPlaylistBtn = document.getElementById('next-playlist-btn');
         const hymnCountSpan = document.getElementById('hymn-count');
 
         const showPlaylistBtn = document.getElementById('show-playlist-btn');
@@ -1564,6 +1592,10 @@
                 closeModal('all-hymns-modal');
                 closeModal('playlist-modal');
                 hideLoader();
+                
+                // Show floating buttons when a hymn is selected
+                goToTopBtn.classList.add('visible');
+                nextPlaylistBtn.classList.add('visible');
             }, 50);
         }
 
@@ -1855,18 +1887,53 @@
             }
         }
         
+        /* MODIFIED: scrollToTop now also resets to the first lyric
+        */
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            if (currentHymnIndex !== -1) {
+                currentLineIndex = 0;
+                updateLyrics();
+            }
         }
 
-        const debouncedScrollHandler = debounce(() => {
-            const isScrolledToBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 5);
-            if (isScrolledToBottom && document.documentElement.scrollHeight > window.innerHeight) {
-                goToTopBtn.classList.add('visible');
-            } else {
-                goToTopBtn.classList.remove('visible');
+        /*
+            NEW: Go to next hymn in playlist
+        */
+        function nextInPlaylist() {
+            if (userPlaylist.hymns.length === 0) {
+                showNotification('Çalma listeniz boş.', 'bg-highlight-red');
+                return;
             }
-        }, 100);
+
+            const currentTitle = hymns[currentHymnIndex]?.title;
+            
+            // Find current index in playlist. Returns -1 if not found.
+            let playlistIndex = userPlaylist.hymns.indexOf(currentTitle);
+            
+            // Calculate next index. If at end, loop to 0. If current not in playlist, start at 0.
+            let nextIndex = playlistIndex + 1;
+            
+            if (playlistIndex === -1) {
+                nextIndex = 0;
+            } else if (nextIndex >= userPlaylist.hymns.length) {
+                nextIndex = 0; // Loop back to start
+                showNotification('Listenin başına dönüldü.', 'bg-highlight-blue');
+            }
+
+            const nextTitle = userPlaylist.hymns[nextIndex];
+            const nextHymnIndex = hymns.findIndex(h => h.title === nextTitle);
+
+            if (nextHymnIndex !== -1) {
+                selectHymn(nextHymnIndex);
+            } else {
+                showNotification('Sıradaki ilahi bulunamadı.', 'bg-highlight-red');
+            }
+        }
+
+        // REMOVED: debouncedScrollHandler logic for hiding the go-to-top button.
+        // The button is now controlled by whether a hymn is active.
 
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
@@ -1884,8 +1951,6 @@
                 }
             }
         });
-
-        window.addEventListener('scroll', debouncedScrollHandler);
 
         document.addEventListener('keydown', (e) => {
             if (currentHymnIndex !== -1) {
