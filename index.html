@@ -1932,13 +1932,42 @@
             }
         }
 
-        // --- NEW SCROLL VISIBILITY LOGIC ---
+        // --- NEW SCROLL VISIBILITY LOGIC (Only at Bottom) ---
         function toggleFloatingButtons() {
-            const threshold = 100;
-            // Check both scroll container and window scroll just in case
-            const isScrolled = lyricsScrollContainer.scrollTop > threshold || window.scrollY > threshold;
+            const buffer = 20; // Tolerance in pixels for "reaching bottom"
             
-            if (isScrolled) {
+            // Check Lyrics Container Scroll
+            const containerScrollHeight = lyricsScrollContainer.scrollHeight;
+            const containerClientHeight = lyricsScrollContainer.clientHeight;
+            const containerScrollTop = lyricsScrollContainer.scrollTop;
+            
+            // Check Window Scroll
+            const windowScrollHeight = document.documentElement.scrollHeight;
+            const windowClientHeight = window.innerHeight;
+            const windowScrollTop = window.scrollY;
+
+            let isAtBottom = false;
+
+            // Logic: 
+            // 1. If lyrics container has scrollable content, check if IT is at the bottom.
+            if (containerScrollHeight > containerClientHeight) {
+                if (containerScrollTop + containerClientHeight >= containerScrollHeight - buffer) {
+                    isAtBottom = true;
+                }
+            } 
+            // 2. If lyrics container doesn't scroll, check if the WINDOW/BODY scrolls and is at the bottom.
+            else if (windowScrollHeight > windowClientHeight) {
+                if (windowScrollTop + windowClientHeight >= windowScrollHeight - buffer) {
+                    isAtBottom = true;
+                }
+            } 
+            // 3. If neither scrolls (content fits on screen), we are technically "at the bottom" immediately.
+            //    Showing the buttons here allows "Next Playlist" to be accessible without scrolling.
+            else {
+                isAtBottom = true; 
+            }
+
+            if (isAtBottom) {
                 goToTopBtn.classList.add('visible');
                 nextPlaylistBtn.classList.add('visible');
             } else {
