@@ -1593,9 +1593,8 @@
                 closeModal('playlist-modal');
                 hideLoader();
                 
-                // Show floating buttons when a hymn is selected
-                goToTopBtn.classList.add('visible');
-                nextPlaylistBtn.classList.add('visible');
+                // Check if scroll is at top (it usually is after render), so hide buttons
+                toggleFloatingButtons(); 
             }, 50);
         }
 
@@ -1891,6 +1890,7 @@
         */
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            lyricsScrollContainer.scrollTo({ top: 0, behavior: 'smooth' }); // Added: scroll container to top
             
             if (currentHymnIndex !== -1) {
                 currentLineIndex = 0;
@@ -1932,8 +1932,21 @@
             }
         }
 
-        // REMOVED: debouncedScrollHandler logic for hiding the go-to-top button.
-        // The button is now controlled by whether a hymn is active.
+        // --- NEW SCROLL VISIBILITY LOGIC ---
+        function toggleFloatingButtons() {
+            const threshold = 100;
+            // Check both scroll container and window scroll just in case
+            const isScrolled = lyricsScrollContainer.scrollTop > threshold || window.scrollY > threshold;
+            
+            if (isScrolled) {
+                goToTopBtn.classList.add('visible');
+                nextPlaylistBtn.classList.add('visible');
+            } else {
+                goToTopBtn.classList.remove('visible');
+                nextPlaylistBtn.classList.remove('visible');
+            }
+        }
+
 
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
@@ -2733,6 +2746,10 @@
 
                 guitarTunerBtn.addEventListener('click', openGuitarTunerModal);
                 startTunerBtn.addEventListener('click', startTuner);
+
+                // Add scroll listener for floating buttons
+                lyricsScrollContainer.addEventListener('scroll', toggleFloatingButtons);
+                window.addEventListener('scroll', toggleFloatingButtons);
 
                 
                 initShepherdMode();
