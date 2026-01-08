@@ -36,8 +36,8 @@
         }
     </script>
     
-    <!-- External data source with cache buster ?v=6 added to force reload -->
-    <script src="shepherd_mode_datanew.js?v=6"></script>
+    <!-- External data source with cache buster -->
+    <script src="shepherd_mode_datanew.js?v=7"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -63,7 +63,7 @@
             -ms-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
-            overflow-x: hidden; /* Prevent body horizontal scroll */
+            overflow-x: hidden;
         }
 
         .lyrics-line {
@@ -290,7 +290,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100; /* Standard modal z-index */
+            z-index: 100;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -302,12 +302,10 @@
             pointer-events: auto;
         }
 
-        /* FIX: Higher z-index for QR Code Modal */
         #qr-code-modal {
             z-index: 150;
         }
 
-        /* FIX: Shepherd Mode must be ABOVE full-screen nav buttons (110) */
         #shepherd-modal {
             z-index: 300 !important;
         }
@@ -315,7 +313,7 @@
         /* GUITAR MODE MODAL (Highest Priority) */
         #guitar-mode-modal {
             z-index: 400 !important;
-            background-color: #000;
+            background-color: #0c0c0c; /* Deeper black for immersion */
         }
 
         .modal-content {
@@ -348,7 +346,6 @@
             }
         }
 
-        /* Adjustments for playlist modal on small screens */
         @media (max-height: 320px) {
             .playlist-modal .modal-content { max-height: 100%; padding: 0.5rem; }
             .playlist-modal .modal-content .flex.justify-between.items-center { padding: 0.5rem; }
@@ -458,12 +455,11 @@
             }
         }
 
-        /* --- UPDATED FLOATING ACTION BUTTONS --- */
         #go-to-top-btn {
             position: fixed;
-            bottom: 1.5rem; /* ~24px, user requested left & bottom */
+            bottom: 1.5rem;
             left: 1.5rem;
-            right: auto; /* Reset right positioning */
+            right: auto;
             background-color: #a5b4fc;
             color: #0f172a;
             border-radius: 9999px;
@@ -479,7 +475,7 @@
         #next-playlist-btn {
             position: fixed;
             bottom: 1.5rem;
-            right: 1.5rem; /* User requested "like this just as right arrow" */
+            right: 1.5rem;
             background-color: #a5b4fc;
             color: #0f172a;
             border-radius: 9999px;
@@ -994,7 +990,7 @@
             }
         }
 
-        /* --- GUITAR MODE STYLES (NEW) --- */
+        /* --- GUITAR MODE STYLES (UPDATED) --- */
         #guitar-mode-modal .modal-content {
             width: 100%;
             height: 100vh;
@@ -1003,9 +999,72 @@
             border-radius: 0;
             background-color: #0c0c0c; /* Deeper black for immersion */
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* Split pane layout */
             padding: 0;
         }
+
+        .guitar-left-pane {
+            width: 25%;
+            background-color: #171717;
+            border-right: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .guitar-right-pane {
+            width: 75%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            #guitar-mode-modal .modal-content {
+                flex-direction: column;
+            }
+            .guitar-left-pane {
+                width: 100%;
+                height: 30%;
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+            .guitar-right-pane {
+                width: 100%;
+                height: 70%;
+            }
+        }
+
+        /* Re-use shepherd list styles for guitar list */
+        #guitar-song-list-container {
+            overflow-y: auto;
+            flex: 1;
+            padding: 0.5rem;
+        }
+
+        #guitar-song-list li {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #guitar-song-list li:hover {
+            background-color: #333;
+        }
+
+        #guitar-song-list li.active {
+            background-color: #0ea5e9;
+            color: white;
+            font-weight: 600;
+        }
+
 
         .guitar-header {
             background-color: #171717;
@@ -1037,6 +1096,7 @@
             padding: 2rem 1rem;
             text-align: center; /* Center align for prompter feel */
             position: relative;
+            scroll-behavior: smooth; /* Smooth scrolling for auto-scroll */
         }
 
         .guitar-song-container {
@@ -1066,6 +1126,11 @@
             color: #4ade80; /* Green */
             text-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
             transform: scale(1.1);
+        }
+
+        .guitar-chord.pending {
+            color: #fbbf24; /* Yellow/Amber for next target */
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
         }
 
         .guitar-lyric-line {
@@ -1420,7 +1485,7 @@
                 <div class="flex items-center gap-2 sm:gap-4">
                     <h2 id="shepherd-modal-title">Çoban Modu</h2>
                     
-                    <!-- NEW: Guitar Mode Button -->
+                    <!-- Guitar Mode Button -->
                     <button id="open-guitar-mode-btn" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors shadow-lg flex items-center gap-1 hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
@@ -1473,42 +1538,58 @@
         </div>
     </div>
 
-    <!-- NEW: GUITAR MODE MODAL -->
+    <!-- GUITAR MODE MODAL -->
     <div id="guitar-mode-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="guitar-header">
-                <div class="text-left">
-                    <h2 class="text-white font-bold text-xl md:text-2xl" id="guitar-song-header"></h2>
-                    <p class="text-gray-400 text-sm" id="guitar-song-key"></p>
-                </div>
-                
-                <!-- Detected Note Indicator -->
-                <div class="guitar-detected-note" id="guitar-detected-note">--</div>
-
-                <button onclick="closeModal('guitar-mode-modal')" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+            
+            <!-- Left Pane: Playlist (New) -->
+            <div class="guitar-left-pane">
+                 <div class="bg-gray-800 p-2 border-b border-gray-700">
+                    <h3 class="text-white font-bold text-sm text-center">Çalma Listesi</h3>
+                 </div>
+                 <div id="guitar-song-list-container">
+                     <ul id="guitar-song-list" class="space-y-1">
+                         <!-- Items will be injected here -->
+                     </ul>
+                 </div>
             </div>
 
-            <div class="guitar-scroll-area" id="guitar-scroll-area">
-                <div class="guitar-song-container" id="guitar-song-container">
-                    <!-- Song Content Goes Here -->
-                </div>
-            </div>
+            <!-- Right Pane: Prompter -->
+            <div class="guitar-right-pane">
+                <div class="guitar-header">
+                    <div class="text-left overflow-hidden">
+                        <h2 class="text-white font-bold text-xl md:text-2xl truncate" id="guitar-song-header"></h2>
+                        <p class="text-gray-400 text-sm" id="guitar-song-key"></p>
+                    </div>
+                    
+                    <!-- Detected Note Indicator -->
+                    <div class="guitar-detected-note flex-shrink-0 ml-2" id="guitar-detected-note">--</div>
 
-            <div class="guitar-controls">
-                <button class="guitar-btn" id="guitar-mic-btn">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                    Mikrofonu Aç
-                </button>
-                <button class="guitar-btn" id="guitar-scroll-btn">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-                    Kaydır
-                </button>
-                <div class="flex items-center gap-2 border border-gray-700 rounded-lg p-1">
-                    <button class="px-2 py-1 text-gray-300 hover:text-white" onclick="transposeGuitarChords(-1)">-</button>
-                    <span class="text-sm text-gray-400">Transpoze</span>
-                    <button class="px-2 py-1 text-gray-300 hover:text-white" onclick="transposeGuitarChords(1)">+</button>
+                    <button onclick="closeModal('guitar-mode-modal')" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full ml-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <div class="guitar-scroll-area" id="guitar-scroll-area">
+                    <div class="guitar-song-container" id="guitar-song-container">
+                        <!-- Song Content Goes Here -->
+                    </div>
+                </div>
+
+                <div class="guitar-controls">
+                    <button class="guitar-btn" id="guitar-mic-btn">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                        Mikrofonu Aç
+                    </button>
+                    <button class="guitar-btn" id="guitar-scroll-btn">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                        Kaydır
+                    </button>
+                    <div class="flex items-center gap-2 border border-gray-700 rounded-lg p-1">
+                        <button class="px-2 py-1 text-gray-300 hover:text-white" onclick="transposeGuitarChords(-1)">-</button>
+                        <span class="text-sm text-gray-400">Transpoze</span>
+                        <button class="px-2 py-1 text-gray-300 hover:text-white" onclick="transposeGuitarChords(1)">+</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1556,6 +1637,11 @@
         let currentTransposition = 0;
         let detectedNoteString = "--";
         const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        
+        // Smart Scroll / Smart Play variables
+        let guitarSongEvents = []; // Array of objects { chordRoot: "A", element: DOMElement }
+        let currentEventIndex = 0;
+        let lastScrollTime = 0;
 
 
         const searchBar = document.getElementById('search-bar');
@@ -1617,6 +1703,7 @@
         const guitarScrollArea = document.getElementById('guitar-scroll-area');
         const guitarDetectedNoteEl = document.getElementById('guitar-detected-note');
         const openGuitarModeBtn = document.getElementById('open-guitar-mode-btn');
+        const guitarSongList = document.getElementById('guitar-song-list');
 
         // Tuner Animation State
         let currentCents = 0;
@@ -2420,22 +2507,72 @@
             guitarScrollBtn.addEventListener('click', toggleGuitarScroll);
         }
 
+        function renderGuitarPlaylist() {
+            guitarSongList.innerHTML = '';
+            
+            let songsToRender = [];
+            if(userPlaylist.hymns && userPlaylist.hymns.length > 0) {
+                 // Filter shepherdSongs based on playlist
+                 if (typeof shepherdSongs !== 'undefined') {
+                     songsToRender = shepherdSongs.filter(s => userPlaylist.hymns.includes(s.title));
+                 }
+            } else {
+                 if (typeof shepherdSongs !== 'undefined') {
+                     songsToRender = shepherdSongs;
+                 }
+            }
+            
+            // Sort
+            songsToRender.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+
+            songsToRender.forEach(song => {
+                const li = document.createElement('li');
+                li.textContent = song.title;
+                if(currentShepherdSong && song.title === currentShepherdSong.title) {
+                    li.classList.add('active');
+                }
+                li.onclick = () => {
+                    currentShepherdSong = song;
+                    renderGuitarModeSong();
+                    renderGuitarPlaylist(); // Refresh to update active class
+                    if (isGuitarModeActive) {
+                        // Restart sequence logic if tracking
+                        resetGuitarSequence();
+                    }
+                };
+                guitarSongList.appendChild(li);
+            });
+            
+            if (songsToRender.length === 0) {
+                 guitarSongList.innerHTML = '<li class="text-xs text-gray-500 italic p-2">Çalma listeniz boş veya veriler yüklenemedi.</li>';
+            }
+        }
+
         function openGuitarMode() {
             if (!currentShepherdSong) return;
             
             openModal('guitar-mode-modal');
             currentTransposition = 0; // Reset transpose
             renderGuitarModeSong();
+            renderGuitarPlaylist();
         }
 
         function stopGuitarMode() {
             stopAudioEngine(); // Kill mic if active
             clearInterval(guitarScrollInterval); // Kill scroll
+            guitarScrollInterval = null;
             isGuitarModeActive = false;
             guitarMicBtn.classList.remove('active');
             guitarMicBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> Mikrofonu Aç`;
             guitarScrollBtn.classList.remove('active');
             guitarScrollBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg> Kaydır`;
+        }
+
+        function resetGuitarSequence() {
+            guitarSongEvents = [];
+            currentEventIndex = 0;
+            // Re-render to clear highlights
+            renderGuitarModeSong(); 
         }
 
         function renderGuitarModeSong() {
@@ -2450,6 +2587,10 @@
             guitarSongKey.textContent = keyText;
 
             guitarSongContainer.innerHTML = '';
+            
+            // Clear tracking
+            guitarSongEvents = [];
+            currentEventIndex = 0;
 
             currentShepherdSong.lyrics.forEach(line => {
                 const div = document.createElement('div');
@@ -2461,20 +2602,35 @@
                     chordDiv.className = "guitar-chord-line";
                     
                     const originalLine = line.chord.join(' ');
-                    // Regex to split chords from spaces but keep layout.
-                    // This is tricky. Simple approach: Replace chords with spanned versions.
-                    // We assume chords are separated by spaces.
                     
-                    // Transposition logic would go here if we were doing complex music theory.
-                    // For now, we will regex replace chords with interactive spans.
+                    // Custom parsing to create interactive elements and event list
+                    let parts = originalLine.split(/(\s+)/); // Split by whitespace but keep delimiters
                     
-                    let processedLine = originalLine.replace(/([A-G][#b]?[m|maj|dim|aug|sus|add|7|9]*)/g, (match) => {
-                         // Transpose individual chord
-                         let transposedChord = transposeChord(match, currentTransposition);
-                         return `<span class="guitar-chord" data-root="${getChordRoot(transposedChord)}">${transposedChord}</span>`;
+                    parts.forEach(part => {
+                        if (part.trim() === "") {
+                            // Whitespace
+                            chordDiv.appendChild(document.createTextNode(part));
+                        } else {
+                            // Potential Chord
+                            let transposedChord = transposeChord(part, currentTransposition);
+                            let root = getChordRoot(transposedChord);
+                            
+                            const span = document.createElement('span');
+                            span.className = "guitar-chord";
+                            span.textContent = transposedChord;
+                            span.dataset.root = root;
+                            
+                            // Add to event sequence
+                            guitarSongEvents.push({
+                                element: span,
+                                chordRoot: root,
+                                isPlayed: false
+                            });
+                            
+                            chordDiv.appendChild(span);
+                        }
                     });
 
-                    chordDiv.innerHTML = processedLine;
                     div.appendChild(chordDiv);
                 }
 
@@ -2488,6 +2644,11 @@
 
                 guitarSongContainer.appendChild(div);
             });
+            
+            // Mark the first chord as pending if exists
+            if (guitarSongEvents.length > 0) {
+                guitarSongEvents[0].element.classList.add('pending');
+            }
         }
 
         // Helper: Extract root note from a chord string (e.g., "Am7" -> "A")
@@ -2504,15 +2665,13 @@
             if (steps === 0) return chord;
             
             const roots = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-            // Map flats to sharps for simplicity in this version
+            
             let root = getChordRoot(chord);
             let suffix = chord.substring(root.length);
             
-            // Normalize flat to sharp
-            if (root.endsWith('b')) {
-               // Logic to convert flat to sharp index (e.g. Db -> C#)
-               // Skipped for brevity, assuming standard sharp notation in database or simple match
-            }
+            // Normalize flat to sharp for simplicity
+            const flatMap = { 'Db':'C#', 'Eb':'D#', 'Gb':'F#', 'Ab':'G#', 'Bb':'A#' };
+            if (flatMap[root]) root = flatMap[root];
 
             let index = roots.indexOf(root);
             if (index === -1) return chord; // Unknown chord
@@ -2553,30 +2712,79 @@
         function updateGuitarModeWithAudio(frequency, clarity) {
             if (!isGuitarModeActive) return;
 
-            // Clear previous highlights
-            document.querySelectorAll('.guitar-chord.active').forEach(el => el.classList.remove('active'));
-
             if (frequency && clarity > 0.85) {
                 const note = getNoteFromFrequency(frequency);
-                
-                // Update UI Note
                 guitarDetectedNoteEl.textContent = note;
                 guitarDetectedNoteEl.classList.add('active');
 
-                // Highlight Matching Chords
-                // We match the Detected Note against the Data-Root of the chords
-                // This highlights all C chords if you play C.
-                const chords = document.querySelectorAll(`.guitar-chord[data-root="${note}"]`);
-                chords.forEach(chord => {
-                    // Highlight only if visible in viewport to save performance? 
-                    // For now, highlight all.
-                    chord.classList.add('active');
-                });
+                // SEQUENTIAL TRACKING LOGIC
+                if (guitarSongEvents.length > 0 && currentEventIndex < guitarSongEvents.length) {
+                    let expectedEvent = guitarSongEvents[currentEventIndex];
+                    let expectedRoot = expectedEvent.chordRoot;
+
+                    // Compare detected note with expected root (simple equality for now, could add fifths/thirds logic later)
+                    // Handling sharps: "C#" matches "C#"
+                    if (note === expectedRoot) {
+                        // Match found!
+                        
+                        // 1. Mark current as played (Green)
+                        expectedEvent.element.classList.remove('pending');
+                        expectedEvent.element.classList.add('active');
+                        expectedEvent.isPlayed = true;
+
+                        // 2. Scroll into view
+                        expectedEvent.element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+
+                        // 3. Move to next event
+                        currentEventIndex++;
+                        
+                        // 4. Highlight next event as pending (Yellow)
+                        if (currentEventIndex < guitarSongEvents.length) {
+                            guitarSongEvents[currentEventIndex].element.classList.add('pending');
+                        }
+                    }
+                }
 
             } else {
-                // Decay
-                // guitarDetectedNoteEl.classList.remove('active'); // Optional flickering reduction
+                 guitarDetectedNoteEl.classList.remove('active');
             }
+        }
+
+        function calculateScrollSpeed() {
+             // Heuristic:
+             // Count Words
+             // Count Chords
+             // Approx 0.6 sec per word (reading/singing speed)
+             // Approx 2.0 sec per chord (transition/sustain)
+             
+             let wordCount = 0;
+             let chordCount = 0;
+             
+             if(currentShepherdSong) {
+                 currentShepherdSong.lyrics.forEach(line => {
+                     if(line.line) wordCount += line.line.split(/\s+/).length;
+                     if(line.chord) chordCount += line.chord.length;
+                 });
+             }
+             
+             // Base duration in seconds
+             const estimatedDuration = (wordCount * 0.6) + (chordCount * 2.0);
+             
+             // Get Total Scroll Height
+             const scrollHeight = guitarSongContainer.scrollHeight;
+             
+             // Speed = Pixels per tick (assume 20 ticks per second i.e. 50ms interval)
+             // Total ticks = estimatedDuration * 20
+             // Pixels per tick = scrollHeight / Total ticks
+             
+             const totalTicks = Math.max(estimatedDuration * 20, 200); // Minimum 10 seconds duration
+             let pixelsPerTick = scrollHeight / totalTicks;
+             
+             // Cap speed to make it "so slowly"
+             if (pixelsPerTick > 1.5) pixelsPerTick = 1.5;
+             if (pixelsPerTick < 0.2) pixelsPerTick = 0.2; 
+             
+             return pixelsPerTick;
         }
 
         function toggleGuitarScroll() {
@@ -2586,12 +2794,14 @@
                 guitarScrollBtn.classList.remove('active');
                 guitarScrollBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg> Kaydır`;
             } else {
+                const speed = calculateScrollSpeed();
+                
                 guitarScrollBtn.classList.add('active');
                 guitarScrollBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Durdur`;
                 
                 guitarScrollInterval = setInterval(() => {
-                    guitarScrollArea.scrollBy({ top: 1, behavior: 'auto' });
-                }, 50); // Speed can be adjustable later
+                    guitarScrollArea.scrollBy({ top: speed, behavior: 'auto' });
+                }, 50); 
             }
         }
 
