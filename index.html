@@ -29,14 +29,15 @@
                     boxShadow: {
                         'glow-green': '0 0 20px rgba(74, 222, 128, 0.5)',
                         'glow-red': '0 0 20px rgba(248, 113, 113, 0.5)',
+                        'glow-gold': '0 0 25px rgba(251, 191, 36, 0.6)',
                     }
                 }
             }
         }
     </script>
     
-    <!-- External data source with cache buster ?v=5 added to force reload -->
-    <script src="shepherd_mode_datanew.js?v=5"></script>
+    <!-- External data source with cache buster ?v=6 added to force reload -->
+    <script src="shepherd_mode_datanew.js?v=6"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -98,7 +99,7 @@
                 padding: 0.6rem;
             }
             
-            #show-all-hymns-btn, #show-playlist-btn, #guitar-tuner-btn, #shepherd-mode-btn, #guitar-mode-btn {
+            #show-all-hymns-btn, #show-playlist-btn, #guitar-tuner-btn, #shepherd-mode-btn {
                 padding: 0.6rem 0.4rem; 
                 font-size: 0.875rem;
             }
@@ -306,9 +307,15 @@
             z-index: 150;
         }
 
-        /* FIX: Shepherd Mode and Guitar Mode must be ABOVE full-screen nav buttons (110) */
-        #shepherd-modal, #guitar-mode-modal {
+        /* FIX: Shepherd Mode must be ABOVE full-screen nav buttons (110) */
+        #shepherd-modal {
             z-index: 300 !important;
+        }
+
+        /* GUITAR MODE MODAL (Highest Priority) */
+        #guitar-mode-modal {
+            z-index: 400 !important;
+            background-color: #000;
         }
 
         .modal-content {
@@ -619,9 +626,9 @@
             font-feature-settings: "tnum" on, "lnum" on;
         }
 
-        /* SHEPHERD MODE & GUITAR MODE STYLES */
+        /* SHEPHERD MODE STYLES */
         
-        #shepherd-modal .modal-content, #guitar-mode-modal .modal-content {
+        #shepherd-modal .modal-content {
             width: 95%;
             max-width: 1400px;
             height: 95vh;
@@ -635,8 +642,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        /* Modal Header */
-        #shepherd-modal .modal-header, #guitar-mode-modal .modal-header {
+        #shepherd-modal .modal-header {
             background-color: #0ea5e9;
             padding: 1rem 1.5rem;
             display: flex;
@@ -645,19 +651,14 @@
             flex-shrink: 0;
         }
 
-        /* Guitar Mode Custom Header Color */
-        #guitar-mode-modal .modal-header {
-            background-color: #ec4899; /* Pink-500 */
-        }
-
-        #shepherd-modal .modal-header h2, #guitar-mode-modal .modal-header h2 {
+        #shepherd-modal .modal-header h2 {
             font-size: 1.5rem;
             font-weight: 700;
             color: white;
             margin: 0;
         }
 
-        #shepherd-modal .close-btn, #guitar-mode-modal .close-btn {
+        #shepherd-modal .close-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             border-radius: 50%;
@@ -670,27 +671,25 @@
             transition: background-color 0.2s ease;
         }
 
-        #shepherd-modal .close-btn:hover, #guitar-mode-modal .close-btn:hover {
+        #shepherd-modal .close-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Modal Body (Flex container for list and lyrics) */
-        #shepherd-modal .modal-body, #guitar-mode-modal .modal-body {
+        #shepherd-modal .modal-body {
             display: flex;
             flex-direction: row;
             flex: 1;
             overflow: hidden;
         }
 
-        /* Mobile Layout */
         @media (max-width: 768px) {
-            #shepherd-modal .modal-body, #guitar-mode-modal .modal-body {
+            #shepherd-modal .modal-body {
                 flex-direction: column;
                 height: 100%;
                 overflow: hidden;
             }
             
-            #shepherd-song-list-container, #guitar-mode-list-container {
+            #shepherd-song-list-container {
                 width: 100% !important;
                 max-height: 40% !important;
                 border-right: none !important;
@@ -698,45 +697,41 @@
                 flex-shrink: 0; 
             }
             
-            #shepherd-lyrics-display-container, #guitar-mode-display-container {
+            #shepherd-lyrics-display-container {
                 width: 100% !important;
                 max-height: 60% !important;
                 flex: 1;
             }
             
-            #shepherd-modal .modal-content, #guitar-mode-modal .modal-content {
+            #shepherd-modal .modal-content {
                 width: 98%;
                 height: 98vh;
             }
             
-            #shepherd-modal .modal-header, #guitar-mode-modal .modal-header {
+            #shepherd-modal .modal-header {
                 padding: 0.75rem 1rem;
             }
             
-            #shepherd-modal .modal-header h2, #guitar-mode-modal .modal-header h2 {
+            #shepherd-modal .modal-header h2 {
                 font-size: 1.25rem;
             }
         }
 
         @media (max-width: 480px) {
-            #shepherd-modal .modal-content, #guitar-mode-modal .modal-content {
+            #shepherd-modal .modal-content {
                 width: 100%;
                 height: 100vh;
                 border-radius: 0;
             }
-            
-            /* Adjust ratio for small mobile */
-            #shepherd-song-list-container, #guitar-mode-list-container {
+            #shepherd-song-list-container {
                 max-height: 30% !important; 
             }
-            
-            #shepherd-lyrics-display-container, #guitar-mode-display-container {
+            #shepherd-lyrics-display-container {
                 max-height: 70% !important; 
             }
         }
 
-        /* Left Pane: Song List */
-        #shepherd-song-list-container, #guitar-mode-list-container {
+        #shepherd-song-list-container {
             width: 35%;
             max-height: 100%;
             overflow-y: auto;
@@ -748,25 +743,24 @@
             overflow-x: hidden;
         }
         
-        /* Sticky List Header */
-        #shepherd-list-header, #guitar-mode-list-header {
+        #shepherd-list-header {
             position: sticky;
             top: 0;
             z-index: 10;
             flex-shrink: 0; 
         }
         
-        #shepherd-list-subtitle, #guitar-mode-list-subtitle {
+        #shepherd-list-subtitle {
             font-weight: 500;
         }
         
-        #shepherd-song-list, #guitar-mode-song-list {
+        #shepherd-song-list {
             padding: 0.5rem;
             flex: 1;
             overflow-y: auto;
         }
 
-        #shepherd-song-list li, #guitar-mode-song-list li {
+        #shepherd-song-list li {
             padding: 0.75rem 1rem;
             margin-bottom: 0.25rem;
             border-radius: 8px;
@@ -780,7 +774,7 @@
             text-overflow: ellipsis;
         }
 
-        #shepherd-song-list li:hover, #guitar-mode-song-list li:hover {
+        #shepherd-song-list li:hover {
             background-color: #334155;
             color: #f1f5f9;
         }
@@ -793,41 +787,16 @@
             box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2);
         }
 
-        #guitar-mode-song-list li.active {
-            background-color: #ec4899; /* Pink for Guitar Mode */
-            color: white;
-            font-weight: 600;
-            border-color: #f472b6;
-            box-shadow: 0 4px 6px rgba(236, 72, 153, 0.2);
-        }
-
-        /* Right Pane: Lyrics Display */
-        #shepherd-lyrics-display-container, #guitar-mode-display-container {
+        #shepherd-lyrics-display-container {
             width: 65%;
             max-height: 100%;
             overflow-y: auto;
-            overflow-x: hidden; 
+            overflow-x: hidden;
             padding: 1.5rem;
             background-color: #1e293b;
         }
-        
-        /* Guitar Mode Specific: Tuner Bar */
-        #gm-tuner-bar {
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
 
-        #shepherd-song-title, #guitar-mode-song-title {
+        #shepherd-song-title {
             font-size: 1.75rem;
             font-weight: 700;
             color: #0ea5e9;
@@ -835,11 +804,7 @@
             line-height: 1.2;
         }
 
-        #guitar-mode-song-title {
-            color: #ec4899; /* Pink */
-        }
-
-        #shepherd-song-meta, #guitar-mode-song-meta {
+        #shepherd-song-meta {
             color: #94a3b8;
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
@@ -847,7 +812,7 @@
             border-bottom: 1px solid #334155;
         }
 
-        #shepherd-lyrics-content, #guitar-mode-lyrics-content {
+        #shepherd-lyrics-content {
             line-height: 1.6;
         }
 
@@ -860,7 +825,6 @@
             border-top: 1px solid #334155;
         }
 
-        /* CRITICAL: Styles to preserve alignment - Font, Whitespace, and Wrapping */
         .shepherd-chord-line {
             font-family: 'JetBrains Mono', monospace; 
             white-space: pre-wrap; 
@@ -871,7 +835,7 @@
             font-weight: 700;
             color: #4ade80;
             margin-bottom: 0; 
-            font-size: clamp(0.8rem, 3.5vw, 1.1rem); /* Dynamic Font Size */
+            font-size: clamp(0.8rem, 3.5vw, 1.1rem);
             line-height: 1.3;
         }
 
@@ -883,25 +847,24 @@
             width: 100%;
             overflow-x: hidden;
             margin-bottom: 1rem;
-            font-size: clamp(0.8rem, 3.5vw, 1.1rem); /* Dynamic Font Size */
+            font-size: clamp(0.8rem, 3.5vw, 1.1rem);
             color: #e2e8f0;
             line-height: 1.3;
         }
 
-        /* Search Bar Area */
-        #shepherd-search-container, #guitar-mode-search-container {
+        #shepherd-search-container {
             padding: 1rem 1.5rem;
             border-top: 1px solid #334155;
             background-color: #1e293b;
             flex-shrink: 0;
             transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
-            max-height: 80px; 
+            max-height: 80px;
             opacity: 1;
             overflow: hidden;
             will-change: max-height, opacity, padding;
         }
         
-        #shepherd-search-container.hidden-search, #guitar-mode-search-container.hidden-search {
+        #shepherd-search-container.hidden-search {
             max-height: 0;
             opacity: 0;
             padding: 0;
@@ -909,7 +872,7 @@
             margin: 0;
         }
 
-        #shepherd-search-input, #guitar-mode-search-input {
+        #shepherd-search-input {
             width: 100%;
             padding: 0.75rem 1rem;
             border-radius: 8px;
@@ -926,17 +889,10 @@
             box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
         }
 
-        #guitar-mode-search-input:focus {
-            outline: none;
-            border-color: #ec4899;
-            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
-        }
-
-        #shepherd-search-input::placeholder, #guitar-mode-search-input::placeholder {
+        #shepherd-search-input::placeholder {
             color: #64748b;
         }
 
-        /* Empty State */
         .shepherd-empty-state {
             text-align: center;
             padding: 2rem;
@@ -947,33 +903,23 @@
             margin-bottom: 1rem;
         }
 
-        /* Scrollbar Styling */
         #shepherd-song-list-container::-webkit-scrollbar,
         #shepherd-lyrics-display-container::-webkit-scrollbar,
-        #shepherd-song-list::-webkit-scrollbar,
-        #guitar-mode-list-container::-webkit-scrollbar,
-        #guitar-mode-display-container::-webkit-scrollbar,
-        #guitar-mode-song-list::-webkit-scrollbar 
+        #shepherd-song-list::-webkit-scrollbar 
         {
             width: 8px;
         }
 
         #shepherd-song-list-container::-webkit-scrollbar-track,
         #shepherd-lyrics-display-container::-webkit-scrollbar-track,
-        #shepherd-song-list::-webkit-scrollbar-track,
-        #guitar-mode-list-container::-webkit-scrollbar-track,
-        #guitar-mode-display-container::-webkit-scrollbar-track,
-        #guitar-mode-song-list::-webkit-scrollbar-track
+        #shepherd-song-list::-webkit-scrollbar-track 
         {
             background: #1e293b;
         }
 
         #shepherd-song-list-container::-webkit-scrollbar-thumb,
         #shepherd-lyrics-display-container::-webkit-scrollbar-thumb,
-        #shepherd-song-list::-webkit-scrollbar-thumb,
-        #guitar-mode-list-container::-webkit-scrollbar-thumb,
-        #guitar-mode-display-container::-webkit-scrollbar-thumb,
-        #guitar-mode-song-list::-webkit-scrollbar-thumb
+        #shepherd-song-list::-webkit-scrollbar-thumb 
         {
             background: #475569;
             border-radius: 4px;
@@ -981,96 +927,39 @@
 
         #shepherd-song-list-container::-webkit-scrollbar-thumb:hover,
         #shepherd-lyrics-display-container::-webkit-scrollbar-thumb:hover,
-        #shepherd-song-list::-webkit-scrollbar-thumb:hover,
-        #guitar-mode-list-container::-webkit-scrollbar-thumb:hover,
-        #guitar-mode-display-container::-webkit-scrollbar-thumb:hover,
-        #guitar-mode-song-list::-webkit-scrollbar-thumb:hover
+        #shepherd-song-list::-webkit-scrollbar-thumb:hover 
         {
             background: #64748b;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .shepherd-lyrics-content > *, #guitar-mode-lyrics-content > * {
+        .shepherd-lyrics-content > * {
             animation: fadeIn 0.3s ease forwards;
         }
 
-        /* Responsive Text Sizes */
         @media (max-width: 320px) {
-            #shepherd-modal .modal-header, #guitar-mode-modal .modal-header {
-                padding: 0.5rem 0.75rem; 
-            }
-
-            #shepherd-modal .modal-header h2, #guitar-mode-modal .modal-header h2 {
-                font-size: 1.1rem; 
-                white-space: normal; 
-            }
-            
-            #shepherd-modal .close-btn, #guitar-mode-modal .close-btn {
-                width: 32px; 
-                height: 32px;
-                flex-shrink: 0; 
-            }
-            
-            #shepherd-list-subtitle, #guitar-mode-list-subtitle {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.75rem;
-            }
-
-            #shepherd-song-list, #guitar-mode-song-list {
-                padding: 0.25rem; 
-            }
-
-            #shepherd-song-list li, #guitar-mode-song-list li {
-                padding: 0.5rem 0.75rem; 
-                font-size: 0.85rem; 
-            }
-
-            #shepherd-lyrics-display-container, #guitar-mode-display-container {
-                padding: 0.75rem; 
-            }
-
-            #shepherd-song-title, #guitar-mode-song-title {
-                font-size: 1.25rem; 
-            }
-
-            #shepherd-song-meta, #guitar-mode-song-meta {
-                font-size: 0.8rem; 
-                margin-bottom: 1rem;
-                padding-bottom: 0.75rem;
-            }
-
-            .shepherd-section-title {
-                font-size: 1rem; 
-            }
-
-            .shepherd-chord-line {
-                font-size: 0.9rem; 
-            }
-
-            .shepherd-lyric-line {
-                font-size: 0.9rem; 
-            }
-
-            #shepherd-search-container, #guitar-mode-search-container {
-                padding: 0.5rem 0.75rem; 
-            }
-
-            #shepherd-search-input, #guitar-mode-search-input {
-                padding: 0.5rem 0.75rem; 
-                font-size: 0.9rem; 
-            }
+            #shepherd-modal .modal-header { padding: 0.5rem 0.75rem; }
+            #shepherd-modal .modal-header h2 { font-size: 1.1rem; white-space: normal; }
+            #shepherd-modal .close-btn { width: 32px; height: 32px; flex-shrink: 0; }
+            #shepherd-list-subtitle { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+            #shepherd-song-list { padding: 0.25rem; }
+            #shepherd-song-list li { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+            #shepherd-lyrics-display-container { padding: 0.75rem; }
+            #shepherd-song-title { font-size: 1.25rem; }
+            #shepherd-song-meta { font-size: 0.8rem; margin-bottom: 1rem; padding-bottom: 0.75rem; }
+            .shepherd-section-title { font-size: 1rem; }
+            .shepherd-chord-line { font-size: 0.9rem; }
+            .shepherd-lyric-line { font-size: 0.9rem; }
+            #shepherd-search-container { padding: 0.5rem 0.75rem; }
+            #shepherd-search-input { padding: 0.5rem 0.75rem; font-size: 0.9rem; }
         }
-
-        /* COLLAPSIBLE LIST PANE LOGIC - OPTIMIZED */
+        
         #shepherd-song-list-container, 
-        #shepherd-lyrics-display-container,
-        #guitar-mode-list-container,
-        #guitar-mode-display-container {
+        #shepherd-lyrics-display-container {
             contain: content; 
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                         max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1081,8 +970,7 @@
             backface-visibility: hidden;
         }
 
-        .modal-body.list-hidden #shepherd-song-list-container,
-        .modal-body.list-hidden #guitar-mode-list-container {
+        #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-song-list-container {
             width: 0;
             min-width: 0;
             border-right: none;
@@ -1091,25 +979,139 @@
             padding: 0; 
         }
         
-        .modal-body.list-hidden #shepherd-lyrics-display-container,
-        .modal-body.list-hidden #guitar-mode-display-container {
+        #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-lyrics-display-container {
             width: 100%;
         }
         
-        /* On mobile, collapsible logic changes height instead of width */
         @media (max-width: 768px) {
-            .modal-body.list-hidden #shepherd-song-list-container,
-            .modal-body.list-hidden #guitar-mode-list-container {
+            #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-song-list-container {
                 max-height: 0 !important;
                 border-bottom: none;
                 padding: 0;
             }
-            
-            .modal-body.list-hidden #shepherd-lyrics-display-container,
-            .modal-body.list-hidden #guitar-mode-display-container {
+            #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-lyrics-display-container {
                 max-height: 100% !important; 
             }
         }
+
+        /* --- GUITAR MODE STYLES (NEW) --- */
+        #guitar-mode-modal .modal-content {
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100vh;
+            border-radius: 0;
+            background-color: #0c0c0c; /* Deeper black for immersion */
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .guitar-header {
+            background-color: #171717;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .guitar-detected-note {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #555; /* Default inactive */
+            font-family: 'JetBrains Mono', monospace;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: color 0.1s, text-shadow 0.1s;
+        }
+        
+        .guitar-detected-note.active {
+            color: #4ade80;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.8);
+        }
+
+        .guitar-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            text-align: center; /* Center align for prompter feel */
+            position: relative;
+        }
+
+        .guitar-song-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 50vh; /* Allow scrolling to bottom */
+        }
+
+        .guitar-chord-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6; /* Blue by default */
+            margin-bottom: 0.25rem;
+            line-height: 1.5;
+            min-height: 1.5em; /* Keep height even if empty */
+        }
+
+        .guitar-chord {
+            display: inline-block;
+            transition: all 0.2s;
+            padding: 0 0.25rem;
+            border-radius: 4px;
+        }
+
+        .guitar-chord.active {
+            color: #4ade80; /* Green */
+            text-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
+            transform: scale(1.1);
+        }
+
+        .guitar-lyric-line {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            color: #e5e5e5;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .guitar-controls {
+            background-color: #171717;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            border-top: 1px solid #333;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .guitar-btn {
+            background-color: #262626;
+            color: white;
+            border: 1px solid #404040;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .guitar-btn:hover { background-color: #404040; }
+        .guitar-btn:active { transform: scale(0.95); }
+        .guitar-btn.active { background-color: #0ea5e9; border-color: #38bdf8; }
+
+        @media (max-width: 600px) {
+            .guitar-chord-line, .guitar-lyric-line { font-size: 1.1rem; }
+            .guitar-detected-note { font-size: 1.5rem; }
+            .guitar-btn { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+            .guitar-header { padding: 0.5rem 1rem; }
+        }
+
     </style>
 </head>
 <body class="bg-primary-bg">
@@ -1139,7 +1141,8 @@
 
             <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
                 
-                <div class="flex items-center space-x-2 w-full flex-wrap justify-center gap-2">
+                
+                <div class="flex items-center space-x-2 w-full">
                     
                     <button id="show-all-hymns-btn" class="flex-1 md:w-auto bg-gray-700 active:bg-gray-600 text-text-light font-bold py-2 px-4 rounded-lg shadow-lg transition-colors">
                         <svg style="margin-inline: auto;" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#f5f5f7"><path d="M500.67-120q-43 1-108.17-6.5-65.16-7.5-125.67-26.33-60.5-18.84-103.66-50.17Q120-234.33 120-280q0 45.67 43.17 77 43.16 31.33 103.66 50.17Q327.34-134 392.5-126.5q65.17 7.5 108.17 6.5Zm-71-211.33q-40-2.34-74-7.34t-64.17-13q-30.17-8-56-18.5t-48.83-24.16q23 13.66 48.83 24.16t56 18.5q30.17 8 64.17 13t74 7.34ZM480-605q86 0 176.83-26.33 90.84-26.34 111.84-57.67Q747-720 656.5-746.67 566-773.33 480-773.33q-89 0-177.5 25.83T190.67-689q23.66 33 111.83 58.5T480-605Zm-28.33 417.33q8.66 18.34 21 35.34 12.33 17 28 32.33-43 1-108.17-6.5-65.16-7.5-125.67-26.33-60.5-18.84-103.66-50.17Q120-234.33 120-280v-408.67q0-29 30.17-56.33 30.16-27.33 80.16-48.67 50-21.33 115.17-33.83T480-840q66 0 130.17 13.17 64.16 13.16 115.5 35.16 51.33 22 82.83 49t31.5 55.34q0 27.66-30.83 54.66-30.84 27-81.5 47.67Q677-564.33 612.5-551.5 548-538.67 480-538.67q-81 0-156.33-17-75.34-17-137-49.33v137q48 33 118 50.67 70 17.66 145.66 20.66-7.33 13-12.33 29.5t-8.33 35.84q-80-4.34-138.17-20.34-58.17-16-104.83-42.66v117Q198-247 279.33-219.67q81.34 27.34 172.34 32ZM873.33-40 764-149.33q-21.33 15.66-46.33 22.5-25 6.83-51 6.83-72.34 0-122.84-50.5t-50.5-122.83q0-72.34 50.5-122.84t122.84-50.5q72.33 0 122.83 50.5T840-293.33q0 26-6.83 51.33-6.84 25.33-22.5 46L920-86.67 873.33-40ZM666.67-186.67q44.66 0 75.66-31t31-75.66q0-44.67-31-75.67t-75.66-31Q622-400 591-369t-31 75.67q0 44.66 31 75.66t75.67 31Z"/></svg>
@@ -1153,12 +1156,6 @@
                         <svg style="margin-inline: auto;" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#f5f5f7"><path d="M395.33-120q-64 0-108.66-44.67Q242-209.33 242-273.33T286.67-382q44.66-44.67 108.66-44.67 26.34 0 47.84 7.17 21.5 7.17 38.83 20.17V-840h236v143.33H548.67v423.34q0 64-44.67 108.66Q459.33-120 395.33-120Z"/></svg>
                     </button>
                     
-                    <!-- NEW: Guitar Mode Button -->
-                    <button id="guitar-mode-btn" class="flex-1 md:w-auto bg-pink-600 active:bg-pink-500 text-text-light font-bold py-2 px-4 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2">
-                        <i class="fas fa-guitar text-xl"></i>
-                        <span class="hidden sm:inline">Gitar Modu</span>
-                    </button>
-
                     <button id="shepherd-mode-btn" class="flex-1 md:w-auto bg-shepherd-primary active:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2">
                          <img style="border-radius: 50%;" src="https://raw.githubusercontent.com/Berahatiye/denememe/refs/heads/main/siwan.png" alt="Çoban Logo" class="logo" width="40" height="40">
                          <span class="hidden sm:inline">Çoban Modu</span>
@@ -1181,7 +1178,7 @@
             
             <div id="welcome-message" class="text-xl md:text-2xl text-text-subtle font-light max-w-2xl text-center">
                 <p class="mb-4">Toplamda: <span id="hymn-count">0</span> adet Türkçe ilahi <br>bulunmaktadır.</p>
-                <p><i>"İlahiyi Yansıt"</i> tuşu, butonlarla sunumu; <br><i>"Ana Ekranı Tam Yap"</i> tuşu ise "Full Screen" moda geçerek daha estetik bir sunumu sağlamaktadır. <br><i>"Çoban Modu"</i> ve <i>"Gitar Modu"</i> ayin yetkilileri için hazırlanmıştır.</p>
+                <p><i>"İlahiyi Yansıt"</i> tuşu, butonlarla sunumu; <br><i>"Ana Ekranı Tam Yap"</i> tuşu ise "Full Screen" moda geçerek daha estetik bir sunumu sağlamaktadır. <br><i>"Çoban Modu"</i> ve <i>"Gitar Akort Aleti"</i> ayin yetkilileri için hazırlanmıştır.</p>
                 <p style="margin-top: 3.1rem; color: #f56fa1; font-size: 12px;">Site by Berahatiye © 2025</p>
             </div>
             
@@ -1422,6 +1419,15 @@
                 
                 <div class="flex items-center gap-2 sm:gap-4">
                     <h2 id="shepherd-modal-title">Çoban Modu</h2>
+                    
+                    <!-- NEW: Guitar Mode Button -->
+                    <button id="open-guitar-mode-btn" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-1 px-3 rounded-md text-sm transition-colors shadow-lg flex items-center gap-1 hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                        </svg>
+                        <span class="hidden sm:inline">Gitar Modu</span>
+                    </button>
+
                     <button id="toggle-shepherd-list-pane" title="Listeyi Gizle" class="p-2 rounded-full hover:bg-white/10 active:bg-white/20 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 sm:w-6 sm:h-6 text-white"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/></svg>
                     </button>
@@ -1466,65 +1472,44 @@
             </div>
         </div>
     </div>
-    
-    <!-- GITAR MODU (New Feature) -->
+
+    <!-- NEW: GUITAR MODE MODAL -->
     <div id="guitar-mode-modal" class="modal-overlay">
         <div class="modal-content">
-            
-            <div class="modal-header">
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <h2 id="guitar-mode-modal-title">Gitar Modu</h2>
-                    <button id="toggle-guitar-mode-list-pane" title="Listeyi Gizle" class="p-2 rounded-full hover:bg-white/10 active:bg-white/20 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 sm:w-6 sm:h-6 text-white"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/></svg>
-                    </button>
+            <div class="guitar-header">
+                <div class="text-left">
+                    <h2 class="text-white font-bold text-xl md:text-2xl" id="guitar-song-header"></h2>
+                    <p class="text-gray-400 text-sm" id="guitar-song-key"></p>
                 </div>
-                <button id="close-guitar-mode-modal" class="close-btn">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+                
+                <!-- Detected Note Indicator -->
+                <div class="guitar-detected-note" id="guitar-detected-note">--</div>
+
+                <button onclick="closeModal('guitar-mode-modal')" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <div class="modal-body">
-                
-                <div id="guitar-mode-list-container">
-                    <div id="guitar-mode-list-header" class="sticky top-0 z-10 bg-secondary-bg border-b border-gray-700">
-                        <p id="guitar-mode-list-subtitle" class="p-2 text-xs text-center text-text-subtle font-medium">Yükleniyor...</p>
-                    </div>
-                    <ul id="guitar-mode-song-list">
-                    </ul>
-                </div>
-
-                <div id="guitar-mode-display-container">
-                    <!-- Tuner Bar Embedded -->
-                    <div id="gm-tuner-bar">
-                        <div class="flex items-center gap-3">
-                             <div class="w-10 h-10 rounded-full bg-gray-800 border border-gray-600 flex items-center justify-center font-bold text-highlight-green text-xl" id="gm-display-note">
-                                -
-                             </div>
-                             <div class="flex flex-col">
-                                 <span class="text-xs text-gray-400">TUNER</span>
-                                 <span class="text-sm font-mono text-white" id="gm-display-freq">-- Hz</span>
-                             </div>
-                        </div>
-                        <canvas id="gm-tuner-gauge" width="100" height="40" class="rounded opacity-80"></canvas>
-                        <button id="gm-mic-toggle" onclick="startTuner()" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-xs rounded-full border border-gray-500 transition-colors">
-                            Mikrofonu Aç
-                        </button>
-                    </div>
-
-                    <h3 id="guitar-mode-song-title" class="text-2xl md:text-3xl font-bold text-pink-500 mb-2"></h3>
-                    <p id="guitar-mode-song-meta" class="text-text-subtle mb-4 md:mb-6"></p>
-                    <div id="guitar-mode-lyrics-content" class="space-y-3 md:space-y-4 text-text-light">
-                        <div class="shepherd-empty-state">
-                            <p>Gitar Modu: Akorlar ve sözler burada görüntülenecek.</p>
-                        </div>
-                    </div>
+            <div class="guitar-scroll-area" id="guitar-scroll-area">
+                <div class="guitar-song-container" id="guitar-song-container">
+                    <!-- Song Content Goes Here -->
                 </div>
             </div>
-            
-            <div id="guitar-mode-search-container">
-                <input type="text" id="guitar-mode-search-input" placeholder="İlahi ara..." class="w-full p-3 bg-primary-bg text-text-light border border-text-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
+
+            <div class="guitar-controls">
+                <button class="guitar-btn" id="guitar-mic-btn">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                    Mikrofonu Aç
+                </button>
+                <button class="guitar-btn" id="guitar-scroll-btn">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                    Kaydır
+                </button>
+                <div class="flex items-center gap-2 border border-gray-700 rounded-lg p-1">
+                    <button class="px-2 py-1 text-gray-300 hover:text-white" onclick="transposeGuitarChords(-1)">-</button>
+                    <span class="text-sm text-gray-400">Transpoze</span>
+                    <button class="px-2 py-1 text-gray-300 hover:text-white" onclick="transposeGuitarChords(1)">+</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1555,7 +1540,23 @@
         let userPlaylist = { name: 'Yeni Çalma Listem', hymns: [] }; 
         let lyricsLineElements = [];
 
-        
+        /* -- Tuner / Mic Variables -- */
+        let audioContext = null;
+        let analyser = null;
+        let microphone = null;
+        let isTunerActive = false;
+        let tunerMode = 'auto'; // 'auto' or 'manual'
+        let currentStringIndex = 0; 
+        let lowPassFilter = null;
+        let animationFrameId = null;
+
+        /* -- Guitar Mode Variables -- */
+        let isGuitarModeActive = false;
+        let guitarScrollInterval = null;
+        let currentTransposition = 0;
+        let detectedNoteString = "--";
+        const noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
 
         const searchBar = document.getElementById('search-bar');
         const clearSearchBtn = document.getElementById('clear-search-btn');
@@ -1606,21 +1607,20 @@
 
         const loaderOverlay = document.getElementById('loader-overlay');
 
-        
-        let audioContext = null;
-        let analyser = null;
-        let microphone = null;
-        let javascriptNode = null;
-        let isTunerActive = false;
-        let tunerMode = 'auto'; // 'auto' or 'manual'
-        let currentStringIndex = 0; 
-        let lowPassFilter = null;
-        let animationFrameId = null;
+        /* GUITAR MODE ELEMENTS */
+        const guitarModeModal = document.getElementById('guitar-mode-modal');
+        const guitarSongContainer = document.getElementById('guitar-song-container');
+        const guitarSongHeader = document.getElementById('guitar-song-header');
+        const guitarSongKey = document.getElementById('guitar-song-key');
+        const guitarMicBtn = document.getElementById('guitar-mic-btn');
+        const guitarScrollBtn = document.getElementById('guitar-scroll-btn');
+        const guitarScrollArea = document.getElementById('guitar-scroll-area');
+        const guitarDetectedNoteEl = document.getElementById('guitar-detected-note');
+        const openGuitarModeBtn = document.getElementById('open-guitar-mode-btn');
 
         // Tuner Animation State
         let currentCents = 0;
         let displayCents = 0;
-        let lastNote = '-';
 
         const guitarStrings = [
             { note: 'E', frequency: 82.41, name: '6. Tel (Kalın Mi)' },
@@ -1640,16 +1640,6 @@
         const shepherdSongMeta = document.getElementById('shepherd-song-meta');
         const shepherdLyricsContent = document.getElementById('shepherd-lyrics-content');
         let currentShepherdSong = null;
-
-        /* GUITAR MODE VARIABLES */
-        const guitarModeModal = document.getElementById('guitar-mode-modal');
-        const guitarModeSongList = document.getElementById('guitar-mode-song-list');
-        const guitarModeSearchInput = document.getElementById('guitar-mode-search-input');
-        const guitarModeDisplay = document.getElementById('guitar-mode-display-container');
-        const guitarModeSongTitle = document.getElementById('guitar-mode-song-title');
-        const guitarModeSongMeta = document.getElementById('guitar-mode-song-meta');
-        const guitarModeLyricsContent = document.getElementById('guitar-mode-lyrics-content');
-        let currentGuitarModeSong = null;
         
 
         function debounce(func, delay) {
@@ -2000,12 +1990,11 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                // If closing any mode that uses tuner, stop it if active (optional, user might want to keep mic on)
-                // But generally good to reset UI or stop if strictly modal
-                if(modalId === 'guitar-tuner-modal') {
-                     // We don't necessarily stop tuner here to keep state if switching, 
-                     // but usually closing modal implies stop.
-                     // The user might want tuner in Guitar Mode too.
+                if(modalId === 'guitar-tuner-modal' && isTunerActive) {
+                    stopAudioEngine();
+                }
+                if(modalId === 'guitar-mode-modal') {
+                    stopGuitarMode();
                 }
                 modal.style.pointerEvents = 'none';
                 modal.classList.remove('visible');
@@ -2013,18 +2002,15 @@
             }
         }
         
-        /* MODIFIED: scrollToTop now also resets to the first lyric */
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            lyricsScrollContainer.scrollTo({ top: 0, behavior: 'smooth' }); // Added: scroll container to top
-            
+            lyricsScrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
             if (currentHymnIndex !== -1) {
                 currentLineIndex = 0;
                 updateLyrics();
             }
         }
 
-        /* NEW: Go to next hymn in playlist */
         function nextInPlaylist() {
             if (userPlaylist.hymns.length === 0) {
                 showNotification('Çalma listeniz boş.', 'bg-highlight-red');
@@ -2032,17 +2018,13 @@
             }
 
             const currentTitle = hymns[currentHymnIndex]?.title;
-            
-            // Find current index in playlist. Returns -1 if not found.
             let playlistIndex = userPlaylist.hymns.indexOf(currentTitle);
-            
-            // Calculate next index. If at end, loop to 0. If current not in playlist, start at 0.
             let nextIndex = playlistIndex + 1;
             
             if (playlistIndex === -1) {
                 nextIndex = 0;
             } else if (nextIndex >= userPlaylist.hymns.length) {
-                nextIndex = 0; // Loop back to start
+                nextIndex = 0; 
                 showNotification('Listenin başına dönüldü.', 'bg-highlight-blue');
             }
 
@@ -2056,38 +2038,27 @@
             }
         }
 
-        // --- NEW SCROLL VISIBILITY LOGIC (Only at Bottom) ---
         function toggleFloatingButtons() {
-            const buffer = 20; // Tolerance in pixels for "reaching bottom"
-            
-            // Check Lyrics Container Scroll
+            const buffer = 20; 
             const containerScrollHeight = lyricsScrollContainer.scrollHeight;
             const containerClientHeight = lyricsScrollContainer.clientHeight;
             const containerScrollTop = lyricsScrollContainer.scrollTop;
             
-            // Check Window Scroll
             const windowScrollHeight = document.documentElement.scrollHeight;
             const windowClientHeight = window.innerHeight;
             const windowScrollTop = window.scrollY;
 
             let isAtBottom = false;
 
-            // Logic: 
-            // 1. If lyrics container has scrollable content, check if IT is at the bottom.
             if (containerScrollHeight > containerClientHeight) {
                 if (containerScrollTop + containerClientHeight >= containerScrollHeight - buffer) {
                     isAtBottom = true;
                 }
-            } 
-            // 2. If lyrics container doesn't scroll, check if the WINDOW/BODY scrolls and is at the bottom.
-            else if (windowScrollHeight > windowClientHeight) {
+            } else if (windowScrollHeight > windowClientHeight) {
                 if (windowScrollTop + windowClientHeight >= windowScrollHeight - buffer) {
                     isAtBottom = true;
                 }
-            } 
-            // 3. If neither scrolls (content fits on screen), we are technically "at the bottom" immediately.
-            //    Showing the buttons here allows "Next Playlist" to be accessible without scrolling.
-            else {
+            } else {
                 isAtBottom = true; 
             }
 
@@ -2099,7 +2070,6 @@
                 nextPlaylistBtn.classList.remove('visible');
             }
         }
-
 
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
@@ -2138,7 +2108,6 @@
             }
         });
 
-        // Add listeners for modal overlays to handle "click outside"
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function(e) {
                 if (e.target === this) {
@@ -2153,81 +2122,17 @@
 
 
         /* =========================================
-           GUITAR TUNER LOGIC (REMASTERED)
+           SHARED AUDIO ENGINE (TUNER & GUITAR MODE)
            ========================================= */
 
-        function setTunerMode(mode) {
-            tunerMode = mode;
-            
-            if (mode === 'auto') {
-                tunerAutoModeBtn.classList.remove('bg-gray-700', 'text-gray-400', 'hover:text-white');
-                tunerAutoModeBtn.classList.add('bg-highlight-blue', 'text-primary-bg', 'shadow-lg');
-                
-                tunerManualModeBtn.classList.add('bg-transparent', 'text-gray-400', 'hover:text-white');
-                tunerManualModeBtn.classList.remove('bg-highlight-blue', 'text-primary-bg', 'shadow-lg');
-                
-                // Clear manual selections
-                document.querySelectorAll('.tuner-peg-btn').forEach(btn => btn.classList.remove('active'));
-            } else {
-                tunerManualModeBtn.classList.remove('bg-gray-700', 'text-gray-400', 'hover:text-white');
-                tunerManualModeBtn.classList.add('bg-highlight-blue', 'text-primary-bg', 'shadow-lg');
-                
-                tunerAutoModeBtn.classList.add('bg-transparent', 'text-gray-400', 'hover:text-white');
-                tunerAutoModeBtn.classList.remove('bg-highlight-blue', 'text-primary-bg', 'shadow-lg');
-                
-                // Default select first string
-                selectString(0);
-            }
-            
-            resetTunerDisplay();
+        function getNoteFromFrequency(frequency) {
+            const noteNum = 12 * (Math.log(frequency / 440) / Math.log(2));
+            const roundedNote = Math.round(noteNum) + 69;
+            const noteName = noteStrings[roundedNote % 12];
+            return noteName;
         }
 
-        function selectString(index) {
-            if (tunerMode !== 'manual') return;
-            currentStringIndex = index;
-            document.querySelectorAll('.tuner-peg-btn').forEach(btn => btn.classList.remove('active'));
-            const btn = document.querySelector(`.tuner-peg-btn[data-index="${index}"]`);
-            if(btn) btn.classList.add('active');
-            
-            // Highlight note on display immediately for manual mode
-            tunerDisplayNote.textContent = guitarStrings[index].note;
-            tunerDisplayNote.style.color = '#94a3b8'; // Grey until sound detected
-            tunerDisplayFreq.textContent = 'Hedef: ' + guitarStrings[index].frequency + ' Hz';
-        }
-
-        function initGuitarTuner() {
-            setTunerMode('auto'); 
-            
-            // Set up Peg Buttons
-            document.querySelectorAll('.tuner-peg-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const index = parseInt(btn.dataset.index);
-                    setTunerMode('manual');
-                    selectString(index);
-                });
-            });
-
-            tunerAutoModeBtn.addEventListener('click', () => setTunerMode('auto'));
-            tunerManualModeBtn.addEventListener('click', () => setTunerMode('manual'));
-            
-            // Initial Draw
-            drawTunerGauge();
-        }
-        
-        function openGuitarTunerModal(e) {
-            e.stopPropagation();
-            openModal('guitar-tuner-modal');
-            if(!isTunerActive) {
-                initGuitarTuner();
-            }
-        }
-
-        function startTuner() {
-            if (isTunerActive) {
-                stopTuner();
-                return;
-            }
-            
+        function startAudioEngine(callback) {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 showNotification('Mikrofon erişimi desteklenmiyor.', 'bg-highlight-red');
                 return;
@@ -2235,20 +2140,6 @@
             
             navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then(function(stream) {
-                isTunerActive = true;
-                
-                // Update buttons in both modals
-                startTunerBtn.textContent = "Durdur";
-                startTunerBtn.classList.remove('bg-highlight-blue', 'text-primary-bg');
-                startTunerBtn.classList.add('bg-highlight-red', 'text-white');
-
-                const gmMicBtn = document.getElementById('gm-mic-toggle');
-                if(gmMicBtn) {
-                     gmMicBtn.textContent = "Mikrofonu Kapat";
-                     gmMicBtn.classList.replace('bg-gray-700', 'bg-red-600');
-                     gmMicBtn.classList.replace('hover:bg-gray-600', 'hover:bg-red-700');
-                }
-
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioContext.createAnalyser();
                 microphone = audioContext.createMediaStreamSource(stream);
@@ -2261,32 +2152,16 @@
                 microphone.connect(lowPassFilter);
                 lowPassFilter.connect(analyser);
                 
-                processAudio();
-                showNotification('Mikrofon aktif!', 'bg-highlight-blue');
+                callback(true); // Success
             })
             .catch(function(err) {
                 console.error('Mikrofon erişimi reddedildi:', err);
                 showNotification('Mikrofon izni gerekli.', 'bg-highlight-red');
+                callback(false);
             });
         }
 
-        function stopTuner() {
-            if (!isTunerActive) return;
-            
-            isTunerActive = false;
-            
-            // Reset buttons
-            startTunerBtn.textContent = "Mikrofonu Başlat";
-            startTunerBtn.classList.add('bg-highlight-blue', 'text-primary-bg');
-            startTunerBtn.classList.remove('bg-highlight-red', 'text-white');
-            
-            const gmMicBtn = document.getElementById('gm-mic-toggle');
-            if(gmMicBtn) {
-                 gmMicBtn.textContent = "Mikrofonu Aç";
-                 gmMicBtn.classList.replace('bg-red-600', 'bg-gray-700');
-                 gmMicBtn.classList.replace('hover:bg-red-700', 'hover:bg-gray-600');
-            }
-
+        function stopAudioEngine() {
             if (microphone) {
                 microphone.mediaStream.getTracks().forEach(track => track.stop());
                 microphone.disconnect();
@@ -2302,11 +2177,11 @@
                 });
             }
             cancelAnimationFrame(animationFrameId);
-            resetTunerDisplay();
+            isTunerActive = false;
         }
 
-        function processAudio() {
-            if (!isTunerActive || !analyser) return;
+        function processAudio(onPitchDetected) {
+            if (!analyser) return;
 
             const bufferSize = analyser.fftSize;
             const buffer = new Float32Array(bufferSize);
@@ -2315,16 +2190,12 @@
             const result = yinPitchDetection(buffer, audioContext.sampleRate);
             
             if (result.frequency) {
-                updateTunerUI(result.frequency, result.clarity);
+                onPitchDetected(result.frequency, result.clarity);
             } else {
-                 // Decay signal
-                 currentCents = currentCents * 0.9;
-                 if(Math.abs(currentCents) < 0.1) currentCents = 0;
-                 // Keep display logic update loop running for smooth decay
-                 updateTunerUI(null, 0); 
+                 onPitchDetected(null, 0);
             }
             
-            animationFrameId = requestAnimationFrame(processAudio);
+            animationFrameId = requestAnimationFrame(() => processAudio(onPitchDetected));
         }
 
         function yinPitchDetection(buffer, sampleRate) {
@@ -2376,11 +2247,40 @@
             if (period) {
                 pitch = sampleRate / period;
                  if (pitch > 50 && pitch < 1000) {
-                      return { frequency: pitch, clarity: clarity };
+                     return { frequency: pitch, clarity: clarity };
                  }
             }
             
             return { frequency: null, clarity: 0 };
+        }
+
+        /* -- Tuner Specific Logic -- */
+        function startTuner() {
+            if (isTunerActive) {
+                stopAudioEngine();
+                startTunerBtn.textContent = "Mikrofonu Başlat";
+                startTunerBtn.classList.add('bg-highlight-blue', 'text-primary-bg');
+                startTunerBtn.classList.remove('bg-highlight-red', 'text-white');
+                resetTunerDisplay();
+                return;
+            }
+
+            startAudioEngine((success) => {
+                if(success) {
+                    isTunerActive = true;
+                    startTunerBtn.textContent = "Durdur";
+                    startTunerBtn.classList.remove('bg-highlight-blue', 'text-primary-bg');
+                    startTunerBtn.classList.add('bg-highlight-red', 'text-white');
+                    processAudio(updateTunerUI);
+                    showNotification('Mikrofon aktif!', 'bg-highlight-blue');
+                }
+            });
+        }
+        
+        function openGuitarTunerModal(e) {
+            e.stopPropagation();
+            openModal('guitar-tuner-modal');
+            drawTunerGauge(); // Initial draw
         }
 
         function findClosestString(frequency) {
@@ -2388,117 +2288,21 @@
                 return (Math.abs(curr.frequency - frequency) < Math.abs(prev.frequency - frequency) ? curr : prev);
             });
         }
-        
+
         function resetTunerDisplay() {
-            // Main Tuner
             tunerDisplayNote.textContent = '-';
             tunerDisplayNote.style.color = 'white';
             tunerDisplayFreq.textContent = '-- Hz';
-            
-            // Guitar Mode Tuner
-            const gmNote = document.getElementById('gm-display-note');
-            const gmFreq = document.getElementById('gm-display-freq');
-            if(gmNote) {
-                gmNote.textContent = '-';
-                gmNote.style.color = '#4ade80';
-            }
-            if(gmFreq) gmFreq.textContent = '-- Hz';
-
             currentCents = 0;
             drawTunerGauge();
-            
-            if(tunerMode === 'auto') {
+             if(tunerMode === 'auto') {
                  document.querySelectorAll('.tuner-peg-btn').forEach(btn => btn.classList.remove('active'));
             }
         }
-
-        // --- NEW CANVAS DRAWING LOGIC ---
-        function drawTunerGauge() {
-            // Draw Main Tuner Gauge
-            if (tunerCtx) {
-                drawGenericGauge(tunerCtx, tunerCanvas.width, tunerCanvas.height, 120);
-            }
-            
-            // Draw Guitar Mode Tuner Gauge (Compact)
-            const gmCanvas = document.getElementById('gm-tuner-gauge');
-            if(gmCanvas) {
-                const gmCtx = gmCanvas.getContext('2d');
-                drawGenericGauge(gmCtx, gmCanvas.width, gmCanvas.height, 35, true);
-            }
-        }
-
-        function drawGenericGauge(ctx, w, h, radius, compact = false) {
-            const cx = w / 2;
-            const cy = h - (compact ? 5 : 20);
-
-            ctx.clearRect(0, 0, w, h);
-
-            // Draw Gauge Arc Background
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius, Math.PI, 2 * Math.PI);
-            ctx.lineWidth = compact ? 8 : 15;
-            ctx.strokeStyle = '#334155'; // Dark slate
-            ctx.stroke();
-            
-            // Draw Center Marker
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - radius - (compact ? 5 : 10));
-            ctx.lineTo(cx, cy - radius + (compact ? 5 : 10));
-            ctx.lineWidth = compact ? 2 : 4;
-            ctx.strokeStyle = '#94a3b8';
-            ctx.stroke();
-
-            // Calculate Needle Angle (-50 cents to +50 cents maps to -45deg to +45deg)
-            let visualCents = Math.max(-50, Math.min(50, displayCents));
-            let angle = (visualCents / 50) * (Math.PI / 4); // +/- 45 degrees
-            
-            // Determine Color based on proximity to 0
-            let needleColor = '#f87171'; // Red
-            if (Math.abs(displayCents) < 5) needleColor = '#4ade80'; // Green
-            else if (Math.abs(displayCents) < 15) needleColor = '#fbbf24'; // Yellow/Orange
-            
-            // Draw Active Arc Segment
-            ctx.beginPath();
-            let startAngle = 1.5 * Math.PI;
-            let endAngle = 1.5 * Math.PI + angle;
-            
-            ctx.arc(cx, cy, radius, Math.min(startAngle, endAngle), Math.max(startAngle, endAngle));
-            ctx.lineWidth = compact ? 8 : 15;
-            ctx.strokeStyle = needleColor;
-            ctx.stroke();
-
-            // Draw Needle
-            ctx.save();
-            ctx.translate(cx, cy);
-            ctx.rotate(angle);
-            
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, -radius + (compact ? 2 : 5));
-            ctx.lineWidth = compact ? 3 : 6;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = 'white';
-            ctx.shadowColor = needleColor;
-            ctx.shadowBlur = 15;
-            ctx.stroke();
-            
-            // Needle Pivot
-            ctx.beginPath();
-            ctx.arc(0, 0, compact ? 4 : 8, 0, 2 * Math.PI);
-            ctx.fillStyle = '#1e293b';
-            ctx.fill();
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            ctx.restore();
-        }
-
+        
         function updateTunerUI(frequency, clarity) {
             let targetCents = 0;
             let hasSignal = false;
-            let targetStringName = '-';
-            let targetStringFreq = 0;
 
             if (frequency && clarity > 0.9) { 
                 hasSignal = true;
@@ -2506,7 +2310,6 @@
                 
                 if (tunerMode === 'auto') {
                     targetString = findClosestString(frequency);
-                    // Update UI Highlight (Main Tuner)
                     document.querySelectorAll('.tuner-peg-btn').forEach(btn => btn.classList.remove('active'));
                     const stringIndex = guitarStrings.indexOf(targetString);
                     const btn = document.querySelector(`.tuner-peg-btn[data-index="${stringIndex}"]`);
@@ -2515,39 +2318,25 @@
                     targetString = guitarStrings[currentStringIndex];
                 }
 
-                targetStringName = targetString.note;
-                targetStringFreq = frequency.toFixed(1) + ' Hz';
+                tunerDisplayNote.textContent = targetString.note;
+                tunerDisplayFreq.textContent = frequency.toFixed(1) + ' Hz';
 
-                // Calculate Cents
                 targetCents = 1200 * Math.log2(frequency / targetString.frequency);
-            }
-
-            // Update DOM Elements for both modes
-            const noteColor = (Math.abs(targetCents) < 5) ? '#4ade80' : ((Math.abs(targetCents) < 15) ? '#fbbf24' : '#f87171');
-            const displayColor = hasSignal ? noteColor : '#64748b';
-            const noteText = hasSignal ? targetStringName : '-';
-            const freqText = hasSignal ? targetStringFreq : '-- Hz';
-
-            // 1. Standard Tuner Modal
-            if(document.getElementById('guitar-tuner-modal').classList.contains('visible')) {
-                tunerDisplayNote.textContent = noteText;
-                tunerDisplayNote.style.color = hasSignal ? noteColor : 'white';
-                tunerDisplayFreq.textContent = freqText;
-            }
-
-            // 2. Guitar Mode Modal
-            if(document.getElementById('guitar-mode-modal').classList.contains('visible')) {
-                const gmNote = document.getElementById('gm-display-note');
-                const gmFreq = document.getElementById('gm-display-freq');
-                if(gmNote) {
-                    gmNote.textContent = noteText;
-                    gmNote.style.color = hasSignal ? noteColor : '#4ade80'; // Default green, changes on signal
-                    gmNote.style.borderColor = hasSignal ? noteColor : '#4b5563';
+                
+                if (Math.abs(targetCents) < 5) {
+                    tunerDisplayNote.style.color = '#4ade80'; 
+                } else if (Math.abs(targetCents) < 15) {
+                    tunerDisplayNote.style.color = '#fbbf24'; 
+                } else {
+                    tunerDisplayNote.style.color = '#f87171'; 
                 }
-                if(gmFreq) gmFreq.textContent = freqText;
+            } else {
+                targetCents = 0; 
+                if(tunerMode === 'auto') {
+                    tunerDisplayNote.style.color = '#64748b';
+                }
             }
 
-            // Smooth Animation
             if (hasSignal) {
                 displayCents = displayCents + (targetCents - displayCents) * 0.2; 
             } else {
@@ -2556,13 +2345,259 @@
             
             drawTunerGauge();
         }
-        
-        
 
-        /* SHEPHERD MODE LOGIC 
-        */
+        function drawTunerGauge() {
+            if (!tunerCtx) return;
+            const w = tunerCanvas.width;
+            const h = tunerCanvas.height;
+            const cx = w / 2;
+            const cy = h - 20;
+            const radius = 120;
+
+            tunerCtx.clearRect(0, 0, w, h);
+
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, radius, Math.PI, 2 * Math.PI);
+            tunerCtx.lineWidth = 15;
+            tunerCtx.strokeStyle = '#334155';
+            tunerCtx.stroke();
+            
+            tunerCtx.beginPath();
+            tunerCtx.moveTo(cx, cy - radius - 10);
+            tunerCtx.lineTo(cx, cy - radius + 10);
+            tunerCtx.lineWidth = 4;
+            tunerCtx.strokeStyle = '#94a3b8';
+            tunerCtx.stroke();
+
+            let visualCents = Math.max(-50, Math.min(50, displayCents));
+            let angle = (visualCents / 50) * (Math.PI / 4); 
+            
+            let needleColor = '#f87171'; 
+            if (Math.abs(displayCents) < 5) needleColor = '#4ade80';
+            else if (Math.abs(displayCents) < 15) needleColor = '#fbbf24';
+            
+            let startAngle = 1.5 * Math.PI;
+            let endAngle = 1.5 * Math.PI + angle;
+            
+            tunerCtx.beginPath();
+            tunerCtx.arc(cx, cy, radius, Math.min(startAngle, endAngle), Math.max(startAngle, endAngle));
+            tunerCtx.lineWidth = 15;
+            tunerCtx.strokeStyle = needleColor;
+            tunerCtx.stroke();
+
+            tunerCtx.save();
+            tunerCtx.translate(cx, cy);
+            tunerCtx.rotate(angle);
+            
+            tunerCtx.beginPath();
+            tunerCtx.moveTo(0, 0);
+            tunerCtx.lineTo(0, -radius + 5);
+            tunerCtx.lineWidth = 6;
+            tunerCtx.lineCap = 'round';
+            tunerCtx.strokeStyle = 'white';
+            tunerCtx.shadowColor = needleColor;
+            tunerCtx.shadowBlur = 15;
+            tunerCtx.stroke();
+            
+            tunerCtx.beginPath();
+            tunerCtx.arc(0, 0, 8, 0, 2 * Math.PI);
+            tunerCtx.fillStyle = '#1e293b';
+            tunerCtx.fill();
+            tunerCtx.strokeStyle = 'white';
+            tunerCtx.lineWidth = 2;
+            tunerCtx.stroke();
+            
+            tunerCtx.restore();
+        }
+
+        /* =========================================
+           GUITAR MODE LOGIC (NEW)
+           ========================================= */
+        
+        function initGuitarMode() {
+            openGuitarModeBtn.addEventListener('click', openGuitarMode);
+            guitarMicBtn.addEventListener('click', toggleGuitarMic);
+            guitarScrollBtn.addEventListener('click', toggleGuitarScroll);
+        }
+
+        function openGuitarMode() {
+            if (!currentShepherdSong) return;
+            
+            openModal('guitar-mode-modal');
+            currentTransposition = 0; // Reset transpose
+            renderGuitarModeSong();
+        }
+
+        function stopGuitarMode() {
+            stopAudioEngine(); // Kill mic if active
+            clearInterval(guitarScrollInterval); // Kill scroll
+            isGuitarModeActive = false;
+            guitarMicBtn.classList.remove('active');
+            guitarMicBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> Mikrofonu Aç`;
+            guitarScrollBtn.classList.remove('active');
+            guitarScrollBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg> Kaydır`;
+        }
+
+        function renderGuitarModeSong() {
+            if (!currentShepherdSong) return;
+
+            guitarSongHeader.textContent = currentShepherdSong.title;
+            
+            let keyText = currentShepherdSong.key ? `Ton: ${currentShepherdSong.key}` : 'Ton: Bilinmiyor';
+            if (currentTransposition !== 0) {
+                keyText += ` (${currentTransposition > 0 ? '+' : ''}${currentTransposition})`;
+            }
+            guitarSongKey.textContent = keyText;
+
+            guitarSongContainer.innerHTML = '';
+
+            currentShepherdSong.lyrics.forEach(line => {
+                const div = document.createElement('div');
+                div.className = "mb-4";
+
+                // 1. Chords Line
+                if (line.chord && line.chord.length > 0) {
+                    const chordDiv = document.createElement('div');
+                    chordDiv.className = "guitar-chord-line";
+                    
+                    const originalLine = line.chord.join(' ');
+                    // Regex to split chords from spaces but keep layout.
+                    // This is tricky. Simple approach: Replace chords with spanned versions.
+                    // We assume chords are separated by spaces.
+                    
+                    // Transposition logic would go here if we were doing complex music theory.
+                    // For now, we will regex replace chords with interactive spans.
+                    
+                    let processedLine = originalLine.replace(/([A-G][#b]?[m|maj|dim|aug|sus|add|7|9]*)/g, (match) => {
+                         // Transpose individual chord
+                         let transposedChord = transposeChord(match, currentTransposition);
+                         return `<span class="guitar-chord" data-root="${getChordRoot(transposedChord)}">${transposedChord}</span>`;
+                    });
+
+                    chordDiv.innerHTML = processedLine;
+                    div.appendChild(chordDiv);
+                }
+
+                // 2. Lyrics Line
+                if (line.line) {
+                    const lyricDiv = document.createElement('div');
+                    lyricDiv.className = "guitar-lyric-line";
+                    lyricDiv.textContent = line.line;
+                    div.appendChild(lyricDiv);
+                }
+
+                guitarSongContainer.appendChild(div);
+            });
+        }
+
+        // Helper: Extract root note from a chord string (e.g., "Am7" -> "A")
+        function getChordRoot(chord) {
+            if(!chord) return "";
+            if(chord.length > 1 && (chord[1] === '#' || chord[1] === 'b')) {
+                return chord.substring(0, 2);
+            }
+            return chord.substring(0, 1);
+        }
+
+        // Helper: Simple Transposition
+        function transposeChord(chord, steps) {
+            if (steps === 0) return chord;
+            
+            const roots = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+            // Map flats to sharps for simplicity in this version
+            let root = getChordRoot(chord);
+            let suffix = chord.substring(root.length);
+            
+            // Normalize flat to sharp
+            if (root.endsWith('b')) {
+               // Logic to convert flat to sharp index (e.g. Db -> C#)
+               // Skipped for brevity, assuming standard sharp notation in database or simple match
+            }
+
+            let index = roots.indexOf(root);
+            if (index === -1) return chord; // Unknown chord
+
+            let newIndex = (index + steps) % 12;
+            if (newIndex < 0) newIndex += 12;
+
+            return roots[newIndex] + suffix;
+        }
+
+        function transposeGuitarChords(step) {
+            currentTransposition += step;
+            renderGuitarModeSong();
+        }
+
+        function toggleGuitarMic() {
+            if (isGuitarModeActive) {
+                // Stop Mic
+                stopAudioEngine();
+                isGuitarModeActive = false;
+                guitarMicBtn.classList.remove('active');
+                guitarMicBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> Mikrofonu Aç`;
+                guitarDetectedNoteEl.textContent = "--";
+                guitarDetectedNoteEl.classList.remove('active');
+            } else {
+                // Start Mic
+                startAudioEngine((success) => {
+                    if (success) {
+                        isGuitarModeActive = true;
+                        guitarMicBtn.classList.add('active');
+                        guitarMicBtn.innerHTML = `<svg class="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> Dinleniyor...`;
+                        processAudio(updateGuitarModeWithAudio);
+                    }
+                });
+            }
+        }
+
+        function updateGuitarModeWithAudio(frequency, clarity) {
+            if (!isGuitarModeActive) return;
+
+            // Clear previous highlights
+            document.querySelectorAll('.guitar-chord.active').forEach(el => el.classList.remove('active'));
+
+            if (frequency && clarity > 0.85) {
+                const note = getNoteFromFrequency(frequency);
+                
+                // Update UI Note
+                guitarDetectedNoteEl.textContent = note;
+                guitarDetectedNoteEl.classList.add('active');
+
+                // Highlight Matching Chords
+                // We match the Detected Note against the Data-Root of the chords
+                // This highlights all C chords if you play C.
+                const chords = document.querySelectorAll(`.guitar-chord[data-root="${note}"]`);
+                chords.forEach(chord => {
+                    // Highlight only if visible in viewport to save performance? 
+                    // For now, highlight all.
+                    chord.classList.add('active');
+                });
+
+            } else {
+                // Decay
+                // guitarDetectedNoteEl.classList.remove('active'); // Optional flickering reduction
+            }
+        }
+
+        function toggleGuitarScroll() {
+            if (guitarScrollInterval) {
+                clearInterval(guitarScrollInterval);
+                guitarScrollInterval = null;
+                guitarScrollBtn.classList.remove('active');
+                guitarScrollBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg> Kaydır`;
+            } else {
+                guitarScrollBtn.classList.add('active');
+                guitarScrollBtn.innerHTML = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Durdur`;
+                
+                guitarScrollInterval = setInterval(() => {
+                    guitarScrollArea.scrollBy({ top: 1, behavior: 'auto' });
+                }, 50); // Speed can be adjustable later
+            }
+        }
 
         
+        /* SHEPHERD MODE LOGIC */
+
         const shepherd_normalize = (text) => {
             if (typeof text !== 'string') return '';
             return text.toLowerCase()
@@ -2579,10 +2614,13 @@
         };
 
         function updateShepherdModeTitles(filterText = '') {
+            const shepherdTitleEl = document.getElementById('shepherd-modal-title');
             const shepherdSubtitleEl = document.getElementById('shepherd-list-subtitle');
-            if (!shepherdSubtitleEl) return; 
+            
+            if (!shepherdTitleEl || !shepherdSubtitleEl) return; 
 
             const hasPlaylist = userPlaylist.hymns && userPlaylist.hymns.length > 0;
+            shepherdTitleEl.textContent = 'Çoban Modu';
             
             if (filterText) {
                 shepherdSubtitleEl.textContent = `"${filterText}" için arama sonuçları`;
@@ -2591,9 +2629,9 @@
             } else {
                 shepherdSubtitleEl.textContent = 'Tüm ilahiler gösteriliyor';
             }
+            shepherdSubtitleEl.classList.remove('hidden');
         }
 
-        
         function renderShepherdList(songsToRender) {
             shepherdSongList.innerHTML = '';
             
@@ -2615,16 +2653,24 @@
                 li.textContent = song.title;
                 li.onclick = () => displayShepherdSong(song);
                 
+                li.tabIndex = 0;
+                li.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        displayShepherdSong(song);
+                    }
+                });
+                
                 if (currentShepherdSong && currentShepherdSong.title === song.title) {
                     li.classList.add('active');
                 }
+
                 shepherdSongList.appendChild(li);
             });
         }
-
+        
         const debouncedSearchHandler = debounce((filter = '') => {
             updateShepherdModeTitles(filter); 
-
             const normalizedFilter = shepherd_normalize(filter);
 
             if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
@@ -2653,7 +2699,6 @@
                 const normalizedTitle = shepherd_normalize(song.title);
                 const normalizedLyrics = song.lyrics.map(l => shepherd_normalize(l.line)).join(' ');
                 const normalizedAuthor = shepherd_normalize(song.author || '');
-                
                 return normalizedTitle.includes(normalizedFilter) || 
                        normalizedLyrics.includes(normalizedFilter) ||
                        normalizedAuthor.includes(normalizedFilter);
@@ -2668,23 +2713,26 @@
             }
         }, 300);
 
-        
         function displayShepherdSong(song) {
             if (!song) {
                 currentShepherdSong = null;
                 shepherdSongTitle.textContent = 'İlahi Seçilmedi';
                 shepherdSongMeta.textContent = '...';
+                openGuitarModeBtn.classList.add('hidden'); // Hide button
                 shepherdLyricsContent.innerHTML = `
                     <div class="shepherd-empty-state">
                         <p>Başlamak için soldaki listeden bir ilahi seçin.</p>
+                        <p class="text-sm mt-2">Listeniz boş olabilir veya aradığınız ilahi bulunamadı.</p>
                     </div>
                 `;
+                Array.from(shepherdSongList.children).forEach(child => child.classList.remove('active'));
                 return;
             }
             
             currentShepherdSong = song;
             shepherdSongTitle.textContent = song.title;
-            
+            openGuitarModeBtn.classList.remove('hidden'); // Show button
+
             let metaText = '';
             if (song.author) metaText += `Yazar: ${song.author}`;
             if (song.key) metaText += metaText ? ` | Ton: ${song.key}` : `Ton: ${song.key}`;
@@ -2695,6 +2743,7 @@
             shepherdLyricsContent.innerHTML = '';
             
             let currentSection = '';
+            let hasContent = false;
 
             song.lyrics.forEach(line => {
                 if (line.section && line.section !== currentSection) {
@@ -2703,6 +2752,7 @@
                     sectionTitle.className = 'shepherd-section-title';
                     sectionTitle.textContent = currentSection; 
                     shepherdLyricsContent.appendChild(sectionTitle);
+                    hasContent = true;
                 }
                 
                 const lineContainer = document.createElement('div');
@@ -2713,6 +2763,7 @@
                     chordEl.className = 'shepherd-chord-line';
                     chordEl.textContent = line.chord.join(' '); 
                     lineContainer.appendChild(chordEl);
+                    hasContent = true;
                 }
                 
                 if (line.line && line.line.trim()) {
@@ -2720,6 +2771,7 @@
                     lineEl.className = 'shepherd-lyric-line';
                     lineEl.textContent = line.line;
                     lineContainer.appendChild(lineEl);
+                    hasContent = true;
                 } else if (!line.chord || line.chord.length === 0) {
                     const emptyLine = document.createElement('div');
                     emptyLine.className = 'shepherd-lyric-line';
@@ -2731,6 +2783,14 @@
                     shepherdLyricsContent.appendChild(lineContainer);
                 }
             });
+
+            if (!hasContent) {
+                shepherdLyricsContent.innerHTML = `
+                    <div class="shepherd-empty-state">
+                        <p>Bu ilahi için henüz söz eklenmemiş.</p>
+                    </div>
+                `;
+            }
 
             shepherdLyricsDisplay.scrollTop = 0;
 
@@ -2746,6 +2806,7 @@
         function openShepherdModal(e) {
             e.stopPropagation();
             openModal('shepherd-modal');
+            updateShepherdModeTitles();
             shepherdSearchInput.value = ''; 
             
             if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
@@ -2755,13 +2816,15 @@
             }
 
             let songsToShow = [];
+            
             if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
-                songsToShow = shepherdSongs.filter(song => userPlaylist.hymns.includes(song.title));
+                songsToShow = shepherdSongs.filter(song => 
+                    userPlaylist.hymns.includes(song.title)
+                );
             } else {
                 songsToShow = shepherdSongs;
             }
             
-            updateShepherdModeTitles();
             renderShepherdList(songsToShow);
             
             if (songsToShow.length > 0) {
@@ -2775,227 +2838,61 @@
             }, 300);
         }
 
-        /* GITAR MODU LOGIC (Duplicates logic but targets Guitar Mode elements)
-        */
-
-        function renderGuitarModeList(songsToRender) {
-            guitarModeSongList.innerHTML = '';
-            
-            if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
-                guitarModeSongList.innerHTML = '<li class="p-3 text-red-400 text-center">Hata: Veri yüklenemedi.</li>';
-                return;
-            }
-
-            if (songsToRender.length === 0) {
-                guitarModeSongList.innerHTML = '<li class="p-3 text-text-subtle text-center">Sonuç bulunamadı.</li>';
-                return;
-            }
-
-            songsToRender.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
-
-            songsToRender.forEach((song) => {
-                const li = document.createElement('li');
-                li.className = 'p-3 hover:bg-primary-bg cursor-pointer rounded-md text-text-light transition-colors';
-                li.textContent = song.title;
-                li.onclick = () => displayGuitarModeSong(song);
-                
-                if (currentGuitarModeSong && currentGuitarModeSong.title === song.title) {
-                    li.classList.add('active');
-                }
-                guitarModeSongList.appendChild(li);
-            });
-        }
-
-        function displayGuitarModeSong(song) {
-            if (!song) {
-                currentGuitarModeSong = null;
-                guitarModeSongTitle.textContent = 'İlahi Seçilmedi';
-                guitarModeSongMeta.textContent = '...';
-                guitarModeLyricsContent.innerHTML = `
-                    <div class="shepherd-empty-state">
-                        <p>Başlamak için soldaki listeden bir ilahi seçin.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            currentGuitarModeSong = song;
-            guitarModeSongTitle.textContent = song.title;
-            
-            let metaText = '';
-            if (song.author) metaText += `Yazar: ${song.author}`;
-            if (song.key) metaText += metaText ? ` | Ton: ${song.key}` : `Ton: ${song.key}`;
-            if (song.tempo) metaText += metaText ? ` | Tempo: ${song.tempo}` : `Tempo: ${song.tempo}`;
-            
-            guitarModeSongMeta.textContent = metaText || 'Bilgi yok';
-            
-            guitarModeLyricsContent.innerHTML = '';
-            let currentSection = '';
-
-            song.lyrics.forEach(line => {
-                if (line.section && line.section !== currentSection) {
-                    currentSection = line.section;
-                    const sectionTitle = document.createElement('div');
-                    sectionTitle.className = 'shepherd-section-title';
-                    sectionTitle.textContent = currentSection; 
-                    guitarModeLyricsContent.appendChild(sectionTitle);
-                }
-                
-                const lineContainer = document.createElement('div');
-                lineContainer.className = 'mb-3';
-                
-                if (line.chord && Array.isArray(line.chord) && line.chord.length > 0) {
-                    const chordEl = document.createElement('div');
-                    chordEl.className = 'shepherd-chord-line';
-                    chordEl.textContent = line.chord.join(' '); 
-                    lineContainer.appendChild(chordEl);
-                }
-                
-                if (line.line && line.line.trim()) {
-                    const lineEl = document.createElement('div');
-                    lineEl.className = 'shepherd-lyric-line';
-                    lineEl.textContent = line.line;
-                    lineContainer.appendChild(lineEl);
-                } else if (!line.chord || line.chord.length === 0) {
-                    const emptyLine = document.createElement('div');
-                    emptyLine.className = 'shepherd-lyric-line';
-                    emptyLine.innerHTML = '&nbsp;';
-                    lineContainer.appendChild(emptyLine);
-                }
-                
-                if (lineContainer.children.length > 0) {
-                    guitarModeLyricsContent.appendChild(lineContainer);
-                }
-            });
-
-            guitarModeDisplay.scrollTop = 0;
-
-            Array.from(guitarModeSongList.children).forEach(child => {
-                child.classList.remove('active');
-                if (child.textContent === song.title) {
-                    child.classList.add('active');
-                    child.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            });
-        }
-
-        const debouncedGuitarSearch = debounce((filter = '') => {
-            const subtitleEl = document.getElementById('guitar-mode-list-subtitle');
-            if (subtitleEl) subtitleEl.textContent = filter ? `"${filter}" sonuçları` : (userPlaylist.hymns && userPlaylist.hymns.length > 0 ? 'Çalma Listeniz' : 'Tüm İlahiler');
-
-            const normalizedFilter = shepherd_normalize(filter);
-
-            if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
-                renderGuitarModeList([]); 
-                return;
-            }
-
-            if (!normalizedFilter) {
-                let defaultSongs = [];
-                if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
-                    defaultSongs = shepherdSongs.filter(song => userPlaylist.hymns.includes(song.title));
-                } else {
-                    defaultSongs = shepherdSongs;
-                }
-                renderGuitarModeList(defaultSongs);
-                if (defaultSongs.length > 0 && !currentGuitarModeSong) displayGuitarModeSong(defaultSongs[0]);
-                return;
-            }
-
-            const filteredSongs = shepherdSongs.filter(song => {
-                const normalizedTitle = shepherd_normalize(song.title);
-                const normalizedLyrics = song.lyrics.map(l => shepherd_normalize(l.line)).join(' ');
-                return normalizedTitle.includes(normalizedFilter) || normalizedLyrics.includes(normalizedFilter);
-            });
-
-            renderGuitarModeList(filteredSongs);
-            if (filteredSongs.length > 0) displayGuitarModeSong(filteredSongs[0]);
-        }, 300);
-
-        function openGuitarMode(e) {
-            e.stopPropagation();
-            openModal('guitar-mode-modal');
-            guitarModeSearchInput.value = '';
-            
-            // Re-use data from shepherdSongs
-            if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
-                renderGuitarModeList([]);
-                displayGuitarModeSong(null);
-                return;
-            }
-
-            let songsToShow = [];
-            if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
-                songsToShow = shepherdSongs.filter(song => userPlaylist.hymns.includes(song.title));
-            } else {
-                songsToShow = shepherdSongs;
-            }
-            
-            const subtitleEl = document.getElementById('guitar-mode-list-subtitle');
-            if (subtitleEl) subtitleEl.textContent = (userPlaylist.hymns && userPlaylist.hymns.length > 0 ? 'Çalma Listeniz' : 'Tüm İlahiler');
-            
-            renderGuitarModeList(songsToShow);
-            if (songsToShow.length > 0) displayGuitarModeSong(songsToShow[0]);
-            
-            // Draw the initial compact gauge
-            setTimeout(() => {
-                 guitarModeSearchInput.focus();
-                 drawTunerGauge(); 
-            }, 300);
-        }
-
-        
         function initShepherdMode() {
             document.getElementById('shepherd-mode-btn').addEventListener('click', openShepherdModal);
             document.getElementById('close-shepherd-modal').addEventListener('click', () => closeModal('shepherd-modal'));
+            
             shepherdSearchInput.addEventListener('input', (e) => debouncedSearchHandler(e.target.value));
 
-            // Guitar Mode Listeners
-            document.getElementById('guitar-mode-btn').addEventListener('click', openGuitarMode);
-            document.getElementById('close-guitar-mode-modal').addEventListener('click', () => closeModal('guitar-mode-modal'));
-            guitarModeSearchInput.addEventListener('input', (e) => debouncedGuitarSearch(e.target.value));
-
-            // Pane Toggles
-            setupPaneToggle('toggle-shepherd-list-pane', 'shepherd-modal', 'shepherd-search-container');
-            setupPaneToggle('toggle-guitar-mode-list-pane', 'guitar-mode-modal', 'guitar-mode-search-container');
-
-            document.addEventListener('keydown', (e) => {
-                if (shepherdModal.classList.contains('visible') && e.key === 'Escape') closeModal('shepherd-modal');
-                if (guitarModeModal.classList.contains('visible') && e.key === 'Escape') closeModal('guitar-mode-modal');
-            });
-        }
-        
-        function setupPaneToggle(btnId, modalId, searchContainerId) {
-            const togglePaneBtn = document.getElementById(btnId);
-            const modalBody = document.getElementById(modalId)?.querySelector('.modal-body');
-            const searchContainer = document.getElementById(searchContainerId);
-            const toggleIcon = togglePaneBtn?.querySelector('svg');
+            const togglePaneBtn = document.getElementById('toggle-shepherd-list-pane');
+            const modalBody = shepherdModal.querySelector('.modal-body');
+            const toggleIcon = togglePaneBtn.querySelector('svg');
+            const searchContainer = document.getElementById('shepherd-search-container');
 
             if (togglePaneBtn && modalBody && toggleIcon) {
                 togglePaneBtn.addEventListener('click', (e) => { 
                     e.stopPropagation(); 
                     requestAnimationFrame(() => {
-                        modalBody.classList.toggle('list-hidden');
-                        const isHidden = modalBody.classList.contains('list-hidden');
+                        modalBody.classList.toggle('shepherd-list-hidden');
+                        const isHidden = modalBody.classList.contains('shepherd-list-hidden');
                         
                         if (searchContainer) {
-                            if (isHidden) searchContainer.classList.add('hidden-search');
-                            else searchContainer.classList.remove('hidden-search');
+                            if (isHidden) {
+                                searchContainer.classList.add('hidden-search');
+                            } else {
+                                searchContainer.classList.remove('hidden-search');
+                            }
                         }
-    
                         togglePaneBtn.title = isHidden ? "Listeyi Göster" : "Listeyi Gizle";
-                        if (isHidden) toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="14" x2="19" y1="9" y2="9"/><line x1="14" x2="19" y1="15" y2="15"/>';
-                        else toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/>';
+                        
+                        if (isHidden) {
+                            toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="14" x2="19" y1="9" y2="9"/><line x1="14" x2="19" y1="15" y2="15"/>';
+                        } else {
+                            toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/>';
+                        }
                     });
                 });
             }
+            
+            document.addEventListener('keydown', (e) => {
+                if (shepherdModal.classList.contains('visible') && !guitarModeModal.classList.contains('visible')) {
+                    if (e.key === 'Escape') {
+                        closeModal('shepherd-modal');
+                    }
+                    if (e.ctrlKey && (e.key === 'f' || e.key === 'F')) {
+                        e.preventDefault();
+                        shepherdSearchInput.focus();
+                        shepherdSearchInput.select();
+                    }
+                }
+            });
         }
+        
 
         async function initializeApp() {
             showLoader();
 
             try {
-                
                 const response = await fetch('hymns.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -3013,7 +2910,6 @@
                 generateShareLinkBtn.addEventListener('click', openShortenerService);
                 copyPlaylistLinkBtn.addEventListener('click', copyPlaylistLink);
                 clearPlaylistBtn.addEventListener('click', clearPlaylist);
-                
                 showQrCodeBtn.addEventListener('click', openQrCodeModal);
 
                 guitarTunerBtn.addEventListener('click', openGuitarTunerModal);
@@ -3022,14 +2918,13 @@
                 lyricsScrollContainer.addEventListener('scroll', toggleFloatingButtons);
                 window.addEventListener('scroll', toggleFloatingButtons);
 
-                
                 initShepherdMode();
+                initGuitarMode(); // Initialize new mode listeners
 
                 playlistNameInput.addEventListener('input', (e) => {
                     userPlaylist.name = e.target.value;
                     savePlaylist();
                 });
-
                 
                 loadPlaylist();
 
@@ -3078,14 +2973,12 @@
                 userPlaylist.name = playlistNameFromUrl;
                 userPlaylist.hymns = [];
                 playlistTitles.forEach(title => {
-                    
                     const hymn = hymns.find(h => h.title === title);
                     if (hymn && !userPlaylist.hymns.includes(hymn.title)) {
                         userPlaylist.hymns.push(hymn.title);
                     }
                 });
                 savePlaylist();
-                
                 window.location.hash = '';
                 return;
             }
@@ -3115,7 +3008,6 @@
             const encodedName = encodeURIComponent(userPlaylist.name);
             const currentPathname = window.location.pathname;
             
-            
             let basePath = window.location.origin + currentPathname;
             if (!basePath.endsWith('/')) {
                  basePath = basePath.substring(0, basePath.lastIndexOf('/') + 1);
@@ -3124,7 +3016,6 @@
             const fullUrl = `${basePath}#playlist=${encodedName}|${encodedTitles.join(',')}`; 
             
             if (userPlaylist.hymns.length > 0) {
-                
                 playlistShareLinkInput.value = fullUrl;
                 generateShareLinkBtn.classList.remove('bg-gray-500', 'cursor-not-allowed');
                 generateShareLinkBtn.classList.add('bg-highlight-blue', 'active:bg-blue-600');
@@ -3136,7 +3027,6 @@
                 showQrCodeBtn.classList.add('bg-purple-600', 'active:bg-purple-500');
                 showQrCodeBtn.disabled = false;
             } else {
-                
                 playlistShareLinkInput.value = '';
                 generateShareLinkBtn.classList.remove('bg-highlight-blue', 'active:bg-blue-600');
                 generateShareLinkBtn.classList.add('bg-gray-500', 'cursor-not-allowed');
@@ -3152,17 +3042,13 @@
         
         function openQrCodeModal() {
             if (userPlaylist.hymns.length === 0) return;
-            
-            // Ensure URL is up to date
             updateUrlWithPlaylist();
             const url = playlistShareLinkInput.value;
-            
             if(!url) return;
             
             openModal('qr-code-modal');
-            
             const container = document.getElementById('qrcode-container');
-            container.innerHTML = ''; // Clear previous code
+            container.innerHTML = ''; 
             
             try {
                 new QRCode(container, {
@@ -3183,17 +3069,13 @@
                 showNotification('Çalma listeniz boş, link kısaltılamaz.', 'bg-highlight-red');
                 return;
             }
-
-            
             updateUrlWithPlaylist();
             const longUrl = playlistShareLinkInput.value;
             if (!longUrl) {
                  showNotification('Paylaşım linki oluşturulamadı.', 'bg-highlight-red');
                  return;
             }
-            
             const shortenerCreator = `https://is.gd/create.php?url=${encodeURIComponent(longUrl)}`;
-            
             window.open(shortenerCreator, '_blank');
         }
 
@@ -3205,19 +3087,6 @@
                 filterHymnsList(); 
             }
             showNotification('Çalma listesi temizlendi!', 'bg-highlight-red');
-        }
-
-        function addToPlaylist(hymnTitle) {
-            if (!userPlaylist.hymns.includes(hymnTitle)) {
-                userPlaylist.hymns.push(hymnTitle);
-                savePlaylist();
-            }
-        }
-
-        function removeFromPlaylist(hymnTitle) {
-            userPlaylist.hymns = userPlaylist.hymns.filter(title => title !== hymnTitle);
-            savePlaylist();
-            renderPlaylist();
         }
 
         function renderPlaylist() {
@@ -3251,11 +3120,9 @@
 
                     const removeBtn = document.createElement('button');
                     removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" /></svg>';
-                    
                     removeBtn.classList.add('bg-highlight-red', 'text-primary-bg', 'py-2', 'px-3', 'rounded-md', 'text-sm', 'transition-colors', 'active:bg-red-600', 'duration-300', 'flex', 'items-center', 'justify-center');
                     removeBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        
                         const titleToRemove = hymn.title;
                         userPlaylist.hymns = userPlaylist.hymns.filter(title => title !== titleToRemove);
                         savePlaylist();
@@ -3269,7 +3136,6 @@
                     playlistItemsContainer.appendChild(listItem);
                 });
             }
-            
             updateUrlWithPlaylist();
         }
 
@@ -3282,18 +3148,14 @@
         function copyPlaylistLink() {
             if(!playlistShareLinkInput.value) return;
             playlistShareLinkInput.select();
-            
             try {
-                
                 navigator.clipboard.writeText(playlistShareLinkInput.value).then(() => {
                     showNotification('Paylaşım linki kopyalandı!', 'bg-highlight-blue');
                 }).catch(() => {
-                    
                     document.execCommand('copy');
                     showNotification('Paylaşım linki kopyalandı!', 'bg-highlight-blue');
                 });
             } catch (err) {
-                
                 document.execCommand('copy');
                 showNotification('Paylaşım linki kopyalandı!', 'bg-highlight-blue');
             }
@@ -3302,13 +3164,11 @@
         function showNotification(message, bgColor) {
             const notification = document.createElement('div');
             notification.classList.add('fixed', 'bottom-4', 'right-4', 'p-3', 'rounded-lg', 'shadow-xl', 'text-white', bgColor, 'z-[250]', 'transition-all', 'duration-300', 'opacity-0', 'transform', 'translate-y-4', 'flex', 'items-center', 'gap-4');
-            
             const messageSpan = document.createElement('span');
             messageSpan.textContent = message;
             notification.appendChild(messageSpan);
 
             let removeTimeout;
-
             const removeNotification = () => {
                 clearTimeout(removeTimeout);
                 notification.classList.remove('opacity-100', 'translate-y-0');
@@ -3322,12 +3182,10 @@
             notification.appendChild(closeBtn);
 
             document.body.appendChild(notification);
-
             setTimeout(() => {
                 notification.classList.remove('opacity-0', 'translate-y-4');
                 notification.classList.add('opacity-100', 'translate-y-0');
             }, 10);
-
             removeTimeout = setTimeout(removeNotification, 3000);
         }
     </script>
