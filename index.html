@@ -98,7 +98,7 @@
                 padding: 0.6rem;
             }
             
-            #show-all-hymns-btn, #show-playlist-btn, #guitar-tuner-btn, #shepherd-mode-btn {
+            #show-all-hymns-btn, #show-playlist-btn, #guitar-tuner-btn, #shepherd-mode-btn, #guitar-mode-btn {
                 padding: 0.6rem 0.4rem; 
                 font-size: 0.875rem;
             }
@@ -306,8 +306,8 @@
             z-index: 150;
         }
 
-        /* FIX: Shepherd Mode must be ABOVE full-screen nav buttons (110) */
-        #shepherd-modal {
+        /* FIX: Shepherd Mode and Guitar Mode must be ABOVE full-screen nav buttons (110) */
+        #shepherd-modal, #guitar-mode-modal {
             z-index: 300 !important;
         }
 
@@ -619,9 +619,9 @@
             font-feature-settings: "tnum" on, "lnum" on;
         }
 
-        /* SHEPHERD MODE STYLES - REVISED FOR RESPONSIVENESS AND Z-INDEX */
+        /* SHEPHERD MODE & GUITAR MODE STYLES */
         
-        #shepherd-modal .modal-content {
+        #shepherd-modal .modal-content, #guitar-mode-modal .modal-content {
             width: 95%;
             max-width: 1400px;
             height: 95vh;
@@ -636,7 +636,7 @@
         }
 
         /* Modal Header */
-        #shepherd-modal .modal-header {
+        #shepherd-modal .modal-header, #guitar-mode-modal .modal-header {
             background-color: #0ea5e9;
             padding: 1rem 1.5rem;
             display: flex;
@@ -645,14 +645,19 @@
             flex-shrink: 0;
         }
 
-        #shepherd-modal .modal-header h2 {
+        /* Guitar Mode Custom Header Color */
+        #guitar-mode-modal .modal-header {
+            background-color: #ec4899; /* Pink-500 */
+        }
+
+        #shepherd-modal .modal-header h2, #guitar-mode-modal .modal-header h2 {
             font-size: 1.5rem;
             font-weight: 700;
             color: white;
             margin: 0;
         }
 
-        #shepherd-modal .close-btn {
+        #shepherd-modal .close-btn, #guitar-mode-modal .close-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             border-radius: 50%;
@@ -665,12 +670,12 @@
             transition: background-color 0.2s ease;
         }
 
-        #shepherd-modal .close-btn:hover {
+        #shepherd-modal .close-btn:hover, #guitar-mode-modal .close-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
         /* Modal Body (Flex container for list and lyrics) */
-        #shepherd-modal .modal-body {
+        #shepherd-modal .modal-body, #guitar-mode-modal .modal-body {
             display: flex;
             flex-direction: row;
             flex: 1;
@@ -679,14 +684,13 @@
 
         /* Mobile Layout */
         @media (max-width: 768px) {
-            #shepherd-modal .modal-body {
+            #shepherd-modal .modal-body, #guitar-mode-modal .modal-body {
                 flex-direction: column;
-                /* On mobile, stack vertically */
                 height: 100%;
                 overflow: hidden;
             }
             
-            #shepherd-song-list-container {
+            #shepherd-song-list-container, #guitar-mode-list-container {
                 width: 100% !important;
                 max-height: 40% !important;
                 border-right: none !important;
@@ -694,46 +698,45 @@
                 flex-shrink: 0; 
             }
             
-            #shepherd-lyrics-display-container {
+            #shepherd-lyrics-display-container, #guitar-mode-display-container {
                 width: 100% !important;
                 max-height: 60% !important;
-                /* Takes remaining space */
                 flex: 1;
             }
             
-            #shepherd-modal .modal-content {
+            #shepherd-modal .modal-content, #guitar-mode-modal .modal-content {
                 width: 98%;
                 height: 98vh;
             }
             
-            #shepherd-modal .modal-header {
+            #shepherd-modal .modal-header, #guitar-mode-modal .modal-header {
                 padding: 0.75rem 1rem;
             }
             
-            #shepherd-modal .modal-header h2 {
+            #shepherd-modal .modal-header h2, #guitar-mode-modal .modal-header h2 {
                 font-size: 1.25rem;
             }
         }
 
         @media (max-width: 480px) {
-            #shepherd-modal .modal-content {
+            #shepherd-modal .modal-content, #guitar-mode-modal .modal-content {
                 width: 100%;
                 height: 100vh;
                 border-radius: 0;
             }
             
             /* Adjust ratio for small mobile */
-            #shepherd-song-list-container {
+            #shepherd-song-list-container, #guitar-mode-list-container {
                 max-height: 30% !important; 
             }
             
-            #shepherd-lyrics-display-container {
+            #shepherd-lyrics-display-container, #guitar-mode-display-container {
                 max-height: 70% !important; 
             }
         }
 
         /* Left Pane: Song List */
-        #shepherd-song-list-container {
+        #shepherd-song-list-container, #guitar-mode-list-container {
             width: 35%;
             max-height: 100%;
             overflow-y: auto;
@@ -746,25 +749,24 @@
         }
         
         /* Sticky List Header */
-        #shepherd-list-header {
+        #shepherd-list-header, #guitar-mode-list-header {
             position: sticky;
             top: 0;
             z-index: 10;
             flex-shrink: 0; 
         }
         
-        #shepherd-list-subtitle {
+        #shepherd-list-subtitle, #guitar-mode-list-subtitle {
             font-weight: 500;
         }
         
-        #shepherd-song-list {
+        #shepherd-song-list, #guitar-mode-song-list {
             padding: 0.5rem;
-            /* Allow list to grow and scroll */
             flex: 1;
             overflow-y: auto;
         }
 
-        #shepherd-song-list li {
+        #shepherd-song-list li, #guitar-mode-song-list li {
             padding: 0.75rem 1rem;
             margin-bottom: 0.25rem;
             border-radius: 8px;
@@ -773,13 +775,12 @@
             font-size: 0.95rem;
             color: #cbd5e1;
             border: 1px solid transparent;
-            /* Prevent reflow during resize to fix FPS */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        #shepherd-song-list li:hover {
+        #shepherd-song-list li:hover, #guitar-mode-song-list li:hover {
             background-color: #334155;
             color: #f1f5f9;
         }
@@ -792,17 +793,41 @@
             box-shadow: 0 4px 6px rgba(14, 165, 233, 0.2);
         }
 
+        #guitar-mode-song-list li.active {
+            background-color: #ec4899; /* Pink for Guitar Mode */
+            color: white;
+            font-weight: 600;
+            border-color: #f472b6;
+            box-shadow: 0 4px 6px rgba(236, 72, 153, 0.2);
+        }
+
         /* Right Pane: Lyrics Display */
-        #shepherd-lyrics-display-container {
+        #shepherd-lyrics-display-container, #guitar-mode-display-container {
             width: 65%;
             max-height: 100%;
             overflow-y: auto;
-            overflow-x: hidden; /* Prevent horizontal scroll on container */
+            overflow-x: hidden; 
             padding: 1.5rem;
             background-color: #1e293b;
         }
+        
+        /* Guitar Mode Specific: Tuner Bar */
+        #gm-tuner-bar {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
 
-        #shepherd-song-title {
+        #shepherd-song-title, #guitar-mode-song-title {
             font-size: 1.75rem;
             font-weight: 700;
             color: #0ea5e9;
@@ -810,7 +835,11 @@
             line-height: 1.2;
         }
 
-        #shepherd-song-meta {
+        #guitar-mode-song-title {
+            color: #ec4899; /* Pink */
+        }
+
+        #shepherd-song-meta, #guitar-mode-song-meta {
             color: #94a3b8;
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
@@ -818,7 +847,7 @@
             border-bottom: 1px solid #334155;
         }
 
-        #shepherd-lyrics-content {
+        #shepherd-lyrics-content, #guitar-mode-lyrics-content {
             line-height: 1.6;
         }
 
@@ -832,7 +861,6 @@
         }
 
         /* CRITICAL: Styles to preserve alignment - Font, Whitespace, and Wrapping */
-        /* white-space: pre-wrap is key: it keeps spaces but wraps text if needed */
         .shepherd-chord-line {
             font-family: 'JetBrains Mono', monospace; 
             white-space: pre-wrap; 
@@ -861,20 +889,19 @@
         }
 
         /* Search Bar Area */
-        #shepherd-search-container {
+        #shepherd-search-container, #guitar-mode-search-container {
             padding: 1rem 1.5rem;
             border-top: 1px solid #334155;
             background-color: #1e293b;
             flex-shrink: 0;
-            /* Transition for smoother hide */
             transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
-            max-height: 80px; /* Approximate height */
+            max-height: 80px; 
             opacity: 1;
             overflow: hidden;
             will-change: max-height, opacity, padding;
         }
         
-        #shepherd-search-container.hidden-search {
+        #shepherd-search-container.hidden-search, #guitar-mode-search-container.hidden-search {
             max-height: 0;
             opacity: 0;
             padding: 0;
@@ -882,7 +909,7 @@
             margin: 0;
         }
 
-        #shepherd-search-input {
+        #shepherd-search-input, #guitar-mode-search-input {
             width: 100%;
             padding: 0.75rem 1rem;
             border-radius: 8px;
@@ -899,7 +926,13 @@
             box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
         }
 
-        #shepherd-search-input::placeholder {
+        #guitar-mode-search-input:focus {
+            outline: none;
+            border-color: #ec4899;
+            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
+        }
+
+        #shepherd-search-input::placeholder, #guitar-mode-search-input::placeholder {
             color: #64748b;
         }
 
@@ -917,21 +950,30 @@
         /* Scrollbar Styling */
         #shepherd-song-list-container::-webkit-scrollbar,
         #shepherd-lyrics-display-container::-webkit-scrollbar,
-        #shepherd-song-list::-webkit-scrollbar 
+        #shepherd-song-list::-webkit-scrollbar,
+        #guitar-mode-list-container::-webkit-scrollbar,
+        #guitar-mode-display-container::-webkit-scrollbar,
+        #guitar-mode-song-list::-webkit-scrollbar 
         {
             width: 8px;
         }
 
         #shepherd-song-list-container::-webkit-scrollbar-track,
         #shepherd-lyrics-display-container::-webkit-scrollbar-track,
-        #shepherd-song-list::-webkit-scrollbar-track 
+        #shepherd-song-list::-webkit-scrollbar-track,
+        #guitar-mode-list-container::-webkit-scrollbar-track,
+        #guitar-mode-display-container::-webkit-scrollbar-track,
+        #guitar-mode-song-list::-webkit-scrollbar-track
         {
             background: #1e293b;
         }
 
         #shepherd-song-list-container::-webkit-scrollbar-thumb,
         #shepherd-lyrics-display-container::-webkit-scrollbar-thumb,
-        #shepherd-song-list::-webkit-scrollbar-thumb 
+        #shepherd-song-list::-webkit-scrollbar-thumb,
+        #guitar-mode-list-container::-webkit-scrollbar-thumb,
+        #guitar-mode-display-container::-webkit-scrollbar-thumb,
+        #guitar-mode-song-list::-webkit-scrollbar-thumb
         {
             background: #475569;
             border-radius: 4px;
@@ -939,7 +981,10 @@
 
         #shepherd-song-list-container::-webkit-scrollbar-thumb:hover,
         #shepherd-lyrics-display-container::-webkit-scrollbar-thumb:hover,
-        #shepherd-song-list::-webkit-scrollbar-thumb:hover 
+        #shepherd-song-list::-webkit-scrollbar-thumb:hover,
+        #guitar-mode-list-container::-webkit-scrollbar-thumb:hover,
+        #guitar-mode-display-container::-webkit-scrollbar-thumb:hover,
+        #guitar-mode-song-list::-webkit-scrollbar-thumb:hover
         {
             background: #64748b;
         }
@@ -950,53 +995,50 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .shepherd-lyrics-content > * {
+        .shepherd-lyrics-content > *, #guitar-mode-lyrics-content > * {
             animation: fadeIn 0.3s ease forwards;
         }
 
-        /* Responsive Text Sizes for Shepherd Mode */
+        /* Responsive Text Sizes */
         @media (max-width: 320px) {
-            /* Extremely small screens */
-            #shepherd-modal .modal-header {
+            #shepherd-modal .modal-header, #guitar-mode-modal .modal-header {
                 padding: 0.5rem 0.75rem; 
             }
 
-            #shepherd-modal .modal-header h2 {
+            #shepherd-modal .modal-header h2, #guitar-mode-modal .modal-header h2 {
                 font-size: 1.1rem; 
                 white-space: normal; 
             }
             
-            #shepherd-modal .close-btn {
+            #shepherd-modal .close-btn, #guitar-mode-modal .close-btn {
                 width: 32px; 
                 height: 32px;
                 flex-shrink: 0; 
             }
             
-            /* List Header */
-            #shepherd-list-subtitle {
+            #shepherd-list-subtitle, #guitar-mode-list-subtitle {
                 padding: 0.5rem 0.75rem;
                 font-size: 0.75rem;
             }
 
-
-            #shepherd-song-list {
+            #shepherd-song-list, #guitar-mode-song-list {
                 padding: 0.25rem; 
             }
 
-            #shepherd-song-list li {
+            #shepherd-song-list li, #guitar-mode-song-list li {
                 padding: 0.5rem 0.75rem; 
                 font-size: 0.85rem; 
             }
 
-            #shepherd-lyrics-display-container {
+            #shepherd-lyrics-display-container, #guitar-mode-display-container {
                 padding: 0.75rem; 
             }
 
-            #shepherd-song-title {
+            #shepherd-song-title, #guitar-mode-song-title {
                 font-size: 1.25rem; 
             }
 
-            #shepherd-song-meta {
+            #shepherd-song-meta, #guitar-mode-song-meta {
                 font-size: 0.8rem; 
                 margin-bottom: 1rem;
                 padding-bottom: 0.75rem;
@@ -1014,20 +1056,21 @@
                 font-size: 0.9rem; 
             }
 
-            #shepherd-search-container {
+            #shepherd-search-container, #guitar-mode-search-container {
                 padding: 0.5rem 0.75rem; 
             }
 
-            #shepherd-search-input {
+            #shepherd-search-input, #guitar-mode-search-input {
                 padding: 0.5rem 0.75rem; 
                 font-size: 0.9rem; 
             }
         }
-        
 
         /* COLLAPSIBLE LIST PANE LOGIC - OPTIMIZED */
         #shepherd-song-list-container, 
-        #shepherd-lyrics-display-container {
+        #shepherd-lyrics-display-container,
+        #guitar-mode-list-container,
+        #guitar-mode-display-container {
             contain: content; 
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                         max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1038,7 +1081,8 @@
             backface-visibility: hidden;
         }
 
-        #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-song-list-container {
+        .modal-body.list-hidden #shepherd-song-list-container,
+        .modal-body.list-hidden #guitar-mode-list-container {
             width: 0;
             min-width: 0;
             border-right: none;
@@ -1047,23 +1091,25 @@
             padding: 0; 
         }
         
-        #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-lyrics-display-container {
+        .modal-body.list-hidden #shepherd-lyrics-display-container,
+        .modal-body.list-hidden #guitar-mode-display-container {
             width: 100%;
         }
         
         /* On mobile, collapsible logic changes height instead of width */
         @media (max-width: 768px) {
-            #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-song-list-container {
+            .modal-body.list-hidden #shepherd-song-list-container,
+            .modal-body.list-hidden #guitar-mode-list-container {
                 max-height: 0 !important;
                 border-bottom: none;
                 padding: 0;
             }
             
-            #shepherd-modal .modal-body.shepherd-list-hidden #shepherd-lyrics-display-container {
+            .modal-body.list-hidden #shepherd-lyrics-display-container,
+            .modal-body.list-hidden #guitar-mode-display-container {
                 max-height: 100% !important; 
             }
         }
-        
     </style>
 </head>
 <body class="bg-primary-bg">
@@ -1093,8 +1139,7 @@
 
             <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
                 
-                
-                <div class="flex items-center space-x-2 w-full">
+                <div class="flex items-center space-x-2 w-full flex-wrap justify-center gap-2">
                     
                     <button id="show-all-hymns-btn" class="flex-1 md:w-auto bg-gray-700 active:bg-gray-600 text-text-light font-bold py-2 px-4 rounded-lg shadow-lg transition-colors">
                         <svg style="margin-inline: auto;" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#f5f5f7"><path d="M500.67-120q-43 1-108.17-6.5-65.16-7.5-125.67-26.33-60.5-18.84-103.66-50.17Q120-234.33 120-280q0 45.67 43.17 77 43.16 31.33 103.66 50.17Q327.34-134 392.5-126.5q65.17 7.5 108.17 6.5Zm-71-211.33q-40-2.34-74-7.34t-64.17-13q-30.17-8-56-18.5t-48.83-24.16q23 13.66 48.83 24.16t56 18.5q30.17 8 64.17 13t74 7.34ZM480-605q86 0 176.83-26.33 90.84-26.34 111.84-57.67Q747-720 656.5-746.67 566-773.33 480-773.33q-89 0-177.5 25.83T190.67-689q23.66 33 111.83 58.5T480-605Zm-28.33 417.33q8.66 18.34 21 35.34 12.33 17 28 32.33-43 1-108.17-6.5-65.16-7.5-125.67-26.33-60.5-18.84-103.66-50.17Q120-234.33 120-280v-408.67q0-29 30.17-56.33 30.16-27.33 80.16-48.67 50-21.33 115.17-33.83T480-840q66 0 130.17 13.17 64.16 13.16 115.5 35.16 51.33 22 82.83 49t31.5 55.34q0 27.66-30.83 54.66-30.84 27-81.5 47.67Q677-564.33 612.5-551.5 548-538.67 480-538.67q-81 0-156.33-17-75.34-17-137-49.33v137q48 33 118 50.67 70 17.66 145.66 20.66-7.33 13-12.33 29.5t-8.33 35.84q-80-4.34-138.17-20.34-58.17-16-104.83-42.66v117Q198-247 279.33-219.67q81.34 27.34 172.34 32ZM873.33-40 764-149.33q-21.33 15.66-46.33 22.5-25 6.83-51 6.83-72.34 0-122.84-50.5t-50.5-122.83q0-72.34 50.5-122.84t122.84-50.5q72.33 0 122.83 50.5T840-293.33q0 26-6.83 51.33-6.84 25.33-22.5 46L920-86.67 873.33-40ZM666.67-186.67q44.66 0 75.66-31t31-75.66q0-44.67-31-75.67t-75.66-31Q622-400 591-369t-31 75.67q0 44.66 31 75.66t75.67 31Z"/></svg>
@@ -1108,6 +1153,12 @@
                         <svg style="margin-inline: auto;" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#f5f5f7"><path d="M395.33-120q-64 0-108.66-44.67Q242-209.33 242-273.33T286.67-382q44.66-44.67 108.66-44.67 26.34 0 47.84 7.17 21.5 7.17 38.83 20.17V-840h236v143.33H548.67v423.34q0 64-44.67 108.66Q459.33-120 395.33-120Z"/></svg>
                     </button>
                     
+                    <!-- NEW: Guitar Mode Button -->
+                    <button id="guitar-mode-btn" class="flex-1 md:w-auto bg-pink-600 active:bg-pink-500 text-text-light font-bold py-2 px-4 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-guitar text-xl"></i>
+                        <span class="hidden sm:inline">Gitar Modu</span>
+                    </button>
+
                     <button id="shepherd-mode-btn" class="flex-1 md:w-auto bg-shepherd-primary active:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2">
                          <img style="border-radius: 50%;" src="https://raw.githubusercontent.com/Berahatiye/denememe/refs/heads/main/siwan.png" alt="Çoban Logo" class="logo" width="40" height="40">
                          <span class="hidden sm:inline">Çoban Modu</span>
@@ -1130,7 +1181,7 @@
             
             <div id="welcome-message" class="text-xl md:text-2xl text-text-subtle font-light max-w-2xl text-center">
                 <p class="mb-4">Toplamda: <span id="hymn-count">0</span> adet Türkçe ilahi <br>bulunmaktadır.</p>
-                <p><i>"İlahiyi Yansıt"</i> tuşu, butonlarla sunumu; <br><i>"Ana Ekranı Tam Yap"</i> tuşu ise "Full Screen" moda geçerek daha estetik bir sunumu sağlamaktadır. <br><i>"Çoban Modu"</i> ve <i>"Gitar Akort Aleti"</i> ayin yetkilileri için hazırlanmıştır.</p>
+                <p><i>"İlahiyi Yansıt"</i> tuşu, butonlarla sunumu; <br><i>"Ana Ekranı Tam Yap"</i> tuşu ise "Full Screen" moda geçerek daha estetik bir sunumu sağlamaktadır. <br><i>"Çoban Modu"</i> ve <i>"Gitar Modu"</i> ayin yetkilileri için hazırlanmıştır.</p>
                 <p style="margin-top: 3.1rem; color: #f56fa1; font-size: 12px;">Site by Berahatiye © 2025</p>
             </div>
             
@@ -1271,7 +1322,7 @@
         </div>
     </div>
 
-    <!-- NEW GUITAR TUNER MODAL DESIGN -->
+    <!-- GUITAR TUNER MODAL -->
     <div id="guitar-tuner-modal" class="modal-overlay">
         <div class="modal-content w-full max-w-md mx-auto flex flex-col bg-gray-900 rounded-xl overflow-hidden" style="height: 80vh; max-height: 800px;">
             <!-- Header -->
@@ -1363,7 +1414,7 @@
         </div>
     </div>
 
-    
+    <!-- SHEPHERD MODE MODAL -->
     <div id="shepherd-modal" class="modal-overlay">
         <div class="modal-content">
             
@@ -1412,6 +1463,68 @@
             
             <div id="shepherd-search-container">
                 <input type="text" id="shepherd-search-input" placeholder="İlahi ara (başlık, söz veya yazar)..." class="w-full p-3 bg-primary-bg text-text-light border border-text-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-shepherd-primary">
+            </div>
+        </div>
+    </div>
+    
+    <!-- GITAR MODU (New Feature) -->
+    <div id="guitar-mode-modal" class="modal-overlay">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <h2 id="guitar-mode-modal-title">Gitar Modu</h2>
+                    <button id="toggle-guitar-mode-list-pane" title="Listeyi Gizle" class="p-2 rounded-full hover:bg-white/10 active:bg-white/20 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 sm:w-6 sm:h-6 text-white"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/></svg>
+                    </button>
+                </div>
+                <button id="close-guitar-mode-modal" class="close-btn">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                
+                <div id="guitar-mode-list-container">
+                    <div id="guitar-mode-list-header" class="sticky top-0 z-10 bg-secondary-bg border-b border-gray-700">
+                        <p id="guitar-mode-list-subtitle" class="p-2 text-xs text-center text-text-subtle font-medium">Yükleniyor...</p>
+                    </div>
+                    <ul id="guitar-mode-song-list">
+                    </ul>
+                </div>
+
+                <div id="guitar-mode-display-container">
+                    <!-- Tuner Bar Embedded -->
+                    <div id="gm-tuner-bar">
+                        <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-full bg-gray-800 border border-gray-600 flex items-center justify-center font-bold text-highlight-green text-xl" id="gm-display-note">
+                                -
+                             </div>
+                             <div class="flex flex-col">
+                                 <span class="text-xs text-gray-400">TUNER</span>
+                                 <span class="text-sm font-mono text-white" id="gm-display-freq">-- Hz</span>
+                             </div>
+                        </div>
+                        <canvas id="gm-tuner-gauge" width="100" height="40" class="rounded opacity-80"></canvas>
+                        <button id="gm-mic-toggle" onclick="startTuner()" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-xs rounded-full border border-gray-500 transition-colors">
+                            Mikrofonu Aç
+                        </button>
+                    </div>
+
+                    <h3 id="guitar-mode-song-title" class="text-2xl md:text-3xl font-bold text-pink-500 mb-2"></h3>
+                    <p id="guitar-mode-song-meta" class="text-text-subtle mb-4 md:mb-6"></p>
+                    <div id="guitar-mode-lyrics-content" class="space-y-3 md:space-y-4 text-text-light">
+                        <div class="shepherd-empty-state">
+                            <p>Gitar Modu: Akorlar ve sözler burada görüntülenecek.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="guitar-mode-search-container">
+                <input type="text" id="guitar-mode-search-input" placeholder="İlahi ara..." class="w-full p-3 bg-primary-bg text-text-light border border-text-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
             </div>
         </div>
     </div>
@@ -1527,6 +1640,16 @@
         const shepherdSongMeta = document.getElementById('shepherd-song-meta');
         const shepherdLyricsContent = document.getElementById('shepherd-lyrics-content');
         let currentShepherdSong = null;
+
+        /* GUITAR MODE VARIABLES */
+        const guitarModeModal = document.getElementById('guitar-mode-modal');
+        const guitarModeSongList = document.getElementById('guitar-mode-song-list');
+        const guitarModeSearchInput = document.getElementById('guitar-mode-search-input');
+        const guitarModeDisplay = document.getElementById('guitar-mode-display-container');
+        const guitarModeSongTitle = document.getElementById('guitar-mode-song-title');
+        const guitarModeSongMeta = document.getElementById('guitar-mode-song-meta');
+        const guitarModeLyricsContent = document.getElementById('guitar-mode-lyrics-content');
+        let currentGuitarModeSong = null;
         
 
         function debounce(func, delay) {
@@ -1877,8 +2000,12 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                if(modalId === 'guitar-tuner-modal' && isTunerActive) {
-                    stopTuner();
+                // If closing any mode that uses tuner, stop it if active (optional, user might want to keep mic on)
+                // But generally good to reset UI or stop if strictly modal
+                if(modalId === 'guitar-tuner-modal') {
+                     // We don't necessarily stop tuner here to keep state if switching, 
+                     // but usually closing modal implies stop.
+                     // The user might want tuner in Guitar Mode too.
                 }
                 modal.style.pointerEvents = 'none';
                 modal.classList.remove('visible');
@@ -1886,8 +2013,7 @@
             }
         }
         
-        /* MODIFIED: scrollToTop now also resets to the first lyric
-        */
+        /* MODIFIED: scrollToTop now also resets to the first lyric */
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             lyricsScrollContainer.scrollTo({ top: 0, behavior: 'smooth' }); // Added: scroll container to top
@@ -1898,9 +2024,7 @@
             }
         }
 
-        /*
-            NEW: Go to next hymn in playlist
-        */
+        /* NEW: Go to next hymn in playlist */
         function nextInPlaylist() {
             if (userPlaylist.hymns.length === 0) {
                 showNotification('Çalma listeniz boş.', 'bg-highlight-red');
@@ -2112,9 +2236,18 @@
             navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then(function(stream) {
                 isTunerActive = true;
+                
+                // Update buttons in both modals
                 startTunerBtn.textContent = "Durdur";
                 startTunerBtn.classList.remove('bg-highlight-blue', 'text-primary-bg');
                 startTunerBtn.classList.add('bg-highlight-red', 'text-white');
+
+                const gmMicBtn = document.getElementById('gm-mic-toggle');
+                if(gmMicBtn) {
+                     gmMicBtn.textContent = "Mikrofonu Kapat";
+                     gmMicBtn.classList.replace('bg-gray-700', 'bg-red-600');
+                     gmMicBtn.classList.replace('hover:bg-gray-600', 'hover:bg-red-700');
+                }
 
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioContext.createAnalyser();
@@ -2141,9 +2274,18 @@
             if (!isTunerActive) return;
             
             isTunerActive = false;
+            
+            // Reset buttons
             startTunerBtn.textContent = "Mikrofonu Başlat";
             startTunerBtn.classList.add('bg-highlight-blue', 'text-primary-bg');
             startTunerBtn.classList.remove('bg-highlight-red', 'text-white');
+            
+            const gmMicBtn = document.getElementById('gm-mic-toggle');
+            if(gmMicBtn) {
+                 gmMicBtn.textContent = "Mikrofonu Aç";
+                 gmMicBtn.classList.replace('bg-red-600', 'bg-gray-700');
+                 gmMicBtn.classList.replace('hover:bg-red-700', 'hover:bg-gray-600');
+            }
 
             if (microphone) {
                 microphone.mediaStream.getTracks().forEach(track => track.stop());
@@ -2234,7 +2376,7 @@
             if (period) {
                 pitch = sampleRate / period;
                  if (pitch > 50 && pitch < 1000) {
-                     return { frequency: pitch, clarity: clarity };
+                      return { frequency: pitch, clarity: clarity };
                  }
             }
             
@@ -2248,9 +2390,20 @@
         }
         
         function resetTunerDisplay() {
+            // Main Tuner
             tunerDisplayNote.textContent = '-';
             tunerDisplayNote.style.color = 'white';
             tunerDisplayFreq.textContent = '-- Hz';
+            
+            // Guitar Mode Tuner
+            const gmNote = document.getElementById('gm-display-note');
+            const gmFreq = document.getElementById('gm-display-freq');
+            if(gmNote) {
+                gmNote.textContent = '-';
+                gmNote.style.color = '#4ade80';
+            }
+            if(gmFreq) gmFreq.textContent = '-- Hz';
+
             currentCents = 0;
             drawTunerGauge();
             
@@ -2261,32 +2414,41 @@
 
         // --- NEW CANVAS DRAWING LOGIC ---
         function drawTunerGauge() {
-            if (!tunerCtx) return;
-            const w = tunerCanvas.width;
-            const h = tunerCanvas.height;
-            const cx = w / 2;
-            const cy = h - 20;
-            const radius = 120;
+            // Draw Main Tuner Gauge
+            if (tunerCtx) {
+                drawGenericGauge(tunerCtx, tunerCanvas.width, tunerCanvas.height, 120);
+            }
+            
+            // Draw Guitar Mode Tuner Gauge (Compact)
+            const gmCanvas = document.getElementById('gm-tuner-gauge');
+            if(gmCanvas) {
+                const gmCtx = gmCanvas.getContext('2d');
+                drawGenericGauge(gmCtx, gmCanvas.width, gmCanvas.height, 35, true);
+            }
+        }
 
-            tunerCtx.clearRect(0, 0, w, h);
+        function drawGenericGauge(ctx, w, h, radius, compact = false) {
+            const cx = w / 2;
+            const cy = h - (compact ? 5 : 20);
+
+            ctx.clearRect(0, 0, w, h);
 
             // Draw Gauge Arc Background
-            tunerCtx.beginPath();
-            tunerCtx.arc(cx, cy, radius, Math.PI, 2 * Math.PI);
-            tunerCtx.lineWidth = 15;
-            tunerCtx.strokeStyle = '#334155'; // Dark slate
-            tunerCtx.stroke();
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, Math.PI, 2 * Math.PI);
+            ctx.lineWidth = compact ? 8 : 15;
+            ctx.strokeStyle = '#334155'; // Dark slate
+            ctx.stroke();
             
             // Draw Center Marker
-            tunerCtx.beginPath();
-            tunerCtx.moveTo(cx, cy - radius - 10);
-            tunerCtx.lineTo(cx, cy - radius + 10);
-            tunerCtx.lineWidth = 4;
-            tunerCtx.strokeStyle = '#94a3b8';
-            tunerCtx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - radius - (compact ? 5 : 10));
+            ctx.lineTo(cx, cy - radius + (compact ? 5 : 10));
+            ctx.lineWidth = compact ? 2 : 4;
+            ctx.strokeStyle = '#94a3b8';
+            ctx.stroke();
 
             // Calculate Needle Angle (-50 cents to +50 cents maps to -45deg to +45deg)
-            // Clamp cents to -50 to +50 for visual
             let visualCents = Math.max(-50, Math.min(50, displayCents));
             let angle = (visualCents / 50) * (Math.PI / 4); // +/- 45 degrees
             
@@ -2295,58 +2457,56 @@
             if (Math.abs(displayCents) < 5) needleColor = '#4ade80'; // Green
             else if (Math.abs(displayCents) < 15) needleColor = '#fbbf24'; // Yellow/Orange
             
-            // Draw Active Arc Segment (from center to current)
-            tunerCtx.beginPath();
-            // Start angle is PI + PI/2 = 3PI/2 (top). 
-            // We want from Top to (Top + angle)
+            // Draw Active Arc Segment
+            ctx.beginPath();
             let startAngle = 1.5 * Math.PI;
             let endAngle = 1.5 * Math.PI + angle;
             
-            // Correct logic for drawing arc segment
-            tunerCtx.arc(cx, cy, radius, Math.min(startAngle, endAngle), Math.max(startAngle, endAngle));
-            tunerCtx.lineWidth = 15;
-            tunerCtx.strokeStyle = needleColor;
-            tunerCtx.stroke();
+            ctx.arc(cx, cy, radius, Math.min(startAngle, endAngle), Math.max(startAngle, endAngle));
+            ctx.lineWidth = compact ? 8 : 15;
+            ctx.strokeStyle = needleColor;
+            ctx.stroke();
 
             // Draw Needle
-            tunerCtx.save();
-            tunerCtx.translate(cx, cy);
-            tunerCtx.rotate(angle);
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle);
             
-            tunerCtx.beginPath();
-            tunerCtx.moveTo(0, 0);
-            tunerCtx.lineTo(0, -radius + 5);
-            tunerCtx.lineWidth = 6;
-            tunerCtx.lineCap = 'round';
-            tunerCtx.strokeStyle = 'white';
-            tunerCtx.shadowColor = needleColor;
-            tunerCtx.shadowBlur = 15;
-            tunerCtx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -radius + (compact ? 2 : 5));
+            ctx.lineWidth = compact ? 3 : 6;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'white';
+            ctx.shadowColor = needleColor;
+            ctx.shadowBlur = 15;
+            ctx.stroke();
             
             // Needle Pivot
-            tunerCtx.beginPath();
-            tunerCtx.arc(0, 0, 8, 0, 2 * Math.PI);
-            tunerCtx.fillStyle = '#1e293b';
-            tunerCtx.fill();
-            tunerCtx.strokeStyle = 'white';
-            tunerCtx.lineWidth = 2;
-            tunerCtx.stroke();
+            ctx.beginPath();
+            ctx.arc(0, 0, compact ? 4 : 8, 0, 2 * Math.PI);
+            ctx.fillStyle = '#1e293b';
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
             
-            tunerCtx.restore();
+            ctx.restore();
         }
 
         function updateTunerUI(frequency, clarity) {
-            // Smoothing Logic: Lerp currentCents towards target
             let targetCents = 0;
             let hasSignal = false;
+            let targetStringName = '-';
+            let targetStringFreq = 0;
 
-            if (frequency && clarity > 0.9) { // Require high clarity
+            if (frequency && clarity > 0.9) { 
                 hasSignal = true;
                 let targetString;
                 
                 if (tunerMode === 'auto') {
                     targetString = findClosestString(frequency);
-                    // Update UI Highlight
+                    // Update UI Highlight (Main Tuner)
                     document.querySelectorAll('.tuner-peg-btn').forEach(btn => btn.classList.remove('active'));
                     const stringIndex = guitarStrings.indexOf(targetString);
                     const btn = document.querySelector(`.tuner-peg-btn[data-index="${stringIndex}"]`);
@@ -2355,37 +2515,43 @@
                     targetString = guitarStrings[currentStringIndex];
                 }
 
-                // Update Note Display
-                tunerDisplayNote.textContent = targetString.note;
-                tunerDisplayFreq.textContent = frequency.toFixed(1) + ' Hz';
+                targetStringName = targetString.note;
+                targetStringFreq = frequency.toFixed(1) + ' Hz';
 
                 // Calculate Cents
                 targetCents = 1200 * Math.log2(frequency / targetString.frequency);
-                
-                // Color Code Text
-                if (Math.abs(targetCents) < 5) {
-                    tunerDisplayNote.style.color = '#4ade80'; // Green
-                } else if (Math.abs(targetCents) < 15) {
-                    tunerDisplayNote.style.color = '#fbbf24'; // Yellow
-                } else {
-                    tunerDisplayNote.style.color = '#f87171'; // Red
-                }
+            }
 
-            } else {
-                // No signal, decay to 0
-                targetCents = 0; 
-                // Keep last note visible but greyed out if we lost signal recently
-                if(tunerMode === 'auto') {
-                    // tunerDisplayNote.textContent = '-'; 
-                    tunerDisplayNote.style.color = '#64748b';
+            // Update DOM Elements for both modes
+            const noteColor = (Math.abs(targetCents) < 5) ? '#4ade80' : ((Math.abs(targetCents) < 15) ? '#fbbf24' : '#f87171');
+            const displayColor = hasSignal ? noteColor : '#64748b';
+            const noteText = hasSignal ? targetStringName : '-';
+            const freqText = hasSignal ? targetStringFreq : '-- Hz';
+
+            // 1. Standard Tuner Modal
+            if(document.getElementById('guitar-tuner-modal').classList.contains('visible')) {
+                tunerDisplayNote.textContent = noteText;
+                tunerDisplayNote.style.color = hasSignal ? noteColor : 'white';
+                tunerDisplayFreq.textContent = freqText;
+            }
+
+            // 2. Guitar Mode Modal
+            if(document.getElementById('guitar-mode-modal').classList.contains('visible')) {
+                const gmNote = document.getElementById('gm-display-note');
+                const gmFreq = document.getElementById('gm-display-freq');
+                if(gmNote) {
+                    gmNote.textContent = noteText;
+                    gmNote.style.color = hasSignal ? noteColor : '#4ade80'; // Default green, changes on signal
+                    gmNote.style.borderColor = hasSignal ? noteColor : '#4b5563';
                 }
+                if(gmFreq) gmFreq.textContent = freqText;
             }
 
             // Smooth Animation
             if (hasSignal) {
-                displayCents = displayCents + (targetCents - displayCents) * 0.2; // Fast response
+                displayCents = displayCents + (targetCents - displayCents) * 0.2; 
             } else {
-                 displayCents = displayCents * 0.9; // Decay
+                 displayCents = displayCents * 0.9; 
             }
             
             drawTunerGauge();
@@ -2393,8 +2559,7 @@
         
         
 
-        /*
-            SHEPHERD MODE LOGIC
+        /* SHEPHERD MODE LOGIC 
         */
 
         
@@ -2413,18 +2578,11 @@
                 .trim();
         };
 
-        
         function updateShepherdModeTitles(filterText = '') {
-            const shepherdTitleEl = document.getElementById('shepherd-modal-title');
             const shepherdSubtitleEl = document.getElementById('shepherd-list-subtitle');
-            
-            if (!shepherdTitleEl || !shepherdSubtitleEl) return; 
+            if (!shepherdSubtitleEl) return; 
 
             const hasPlaylist = userPlaylist.hymns && userPlaylist.hymns.length > 0;
-
-            
-            shepherdTitleEl.textContent = 'Çoban Modu';
-
             
             if (filterText) {
                 shepherdSubtitleEl.textContent = `"${filterText}" için arama sonuçları`;
@@ -2433,27 +2591,22 @@
             } else {
                 shepherdSubtitleEl.textContent = 'Tüm ilahiler gösteriliyor';
             }
-            
-            shepherdSubtitleEl.classList.remove('hidden');
         }
 
         
         function renderShepherdList(songsToRender) {
             shepherdSongList.innerHTML = '';
             
-            
             if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
-                shepherdSongList.innerHTML = '<li class="p-3 text-red-400 text-center">Hata: Çoban Modu verisi yüklenemedi, verinin internet erişimi olduğundan emin olunuz.</li>';
+                shepherdSongList.innerHTML = '<li class="p-3 text-red-400 text-center">Hata: Çoban Modu verisi yüklenemedi.</li>';
                 return;
             }
 
-            
             if (songsToRender.length === 0) {
                 shepherdSongList.innerHTML = '<li class="p-3 text-text-subtle text-center">Sonuç bulunamadı.</li>';
                 return;
             }
 
-            
             songsToRender.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
 
             songsToRender.forEach((song) => {
@@ -2462,37 +2615,23 @@
                 li.textContent = song.title;
                 li.onclick = () => displayShepherdSong(song);
                 
-                li.tabIndex = 0;
-                li.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        displayShepherdSong(song);
-                    }
-                });
-                
                 if (currentShepherdSong && currentShepherdSong.title === song.title) {
                     li.classList.add('active');
                 }
-
                 shepherdSongList.appendChild(li);
             });
         }
 
-        
         const debouncedSearchHandler = debounce((filter = '') => {
-            
             updateShepherdModeTitles(filter); 
-            
 
             const normalizedFilter = shepherd_normalize(filter);
 
-            
             if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
                 renderShepherdList([]); 
                 return;
             }
 
-            
             if (!normalizedFilter) {
                 let defaultSongs = [];
                 if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
@@ -2510,7 +2649,6 @@
                 return;
             }
 
-            
             const filteredSongs = shepherdSongs.filter(song => {
                 const normalizedTitle = shepherd_normalize(song.title);
                 const normalizedLyrics = song.lyrics.map(l => shepherd_normalize(l.line)).join(' ');
@@ -2523,7 +2661,6 @@
 
             renderShepherdList(filteredSongs);
 
-            
             if (filteredSongs.length > 0) {
                 displayShepherdSong(filteredSongs[0]);
             } else {
@@ -2533,7 +2670,6 @@
 
         
         function displayShepherdSong(song) {
-            
             if (!song) {
                 currentShepherdSong = null;
                 shepherdSongTitle.textContent = 'İlahi Seçilmedi';
@@ -2541,19 +2677,13 @@
                 shepherdLyricsContent.innerHTML = `
                     <div class="shepherd-empty-state">
                         <p>Başlamak için soldaki listeden bir ilahi seçin.</p>
-                        <p class="text-sm mt-2">Listeniz boş olabilir veya aradığınız ilahi bulunamadı.</p>
                     </div>
                 `;
-                
-                Array.from(shepherdSongList.children).forEach(child => {
-                    child.classList.remove('active');
-                });
                 return;
             }
             
             currentShepherdSong = song;
             shepherdSongTitle.textContent = song.title;
-            
             
             let metaText = '';
             if (song.author) metaText += `Yazar: ${song.author}`;
@@ -2562,46 +2692,35 @@
             
             shepherdSongMeta.textContent = metaText || 'Bilgi yok';
             
-            
             shepherdLyricsContent.innerHTML = '';
             
             let currentSection = '';
-            let hasContent = false;
 
             song.lyrics.forEach(line => {
-                
                 if (line.section && line.section !== currentSection) {
                     currentSection = line.section;
                     const sectionTitle = document.createElement('div');
                     sectionTitle.className = 'shepherd-section-title';
-                    
                     sectionTitle.textContent = currentSection; 
                     shepherdLyricsContent.appendChild(sectionTitle);
-                    hasContent = true;
                 }
                 
                 const lineContainer = document.createElement('div');
                 lineContainer.className = 'mb-3';
-                
-                
                 
                 if (line.chord && Array.isArray(line.chord) && line.chord.length > 0) {
                     const chordEl = document.createElement('div');
                     chordEl.className = 'shepherd-chord-line';
                     chordEl.textContent = line.chord.join(' '); 
                     lineContainer.appendChild(chordEl);
-                    hasContent = true;
                 }
-                
                 
                 if (line.line && line.line.trim()) {
                     const lineEl = document.createElement('div');
                     lineEl.className = 'shepherd-lyric-line';
                     lineEl.textContent = line.line;
                     lineContainer.appendChild(lineEl);
-                    hasContent = true;
                 } else if (!line.chord || line.chord.length === 0) {
-                    
                     const emptyLine = document.createElement('div');
                     emptyLine.className = 'shepherd-lyric-line';
                     emptyLine.innerHTML = '&nbsp;';
@@ -2613,41 +2732,21 @@
                 }
             });
 
-            
-            if (!hasContent) {
-                shepherdLyricsContent.innerHTML = `
-                    <div class="shepherd-empty-state">
-                        <p>Bu ilahi için henüz söz eklenmemiş.</p>
-                    </div>
-                `;
-            }
-
-            
             shepherdLyricsDisplay.scrollTop = 0;
 
-            
             Array.from(shepherdSongList.children).forEach(child => {
                 child.classList.remove('active');
                 if (child.textContent === song.title) {
                     child.classList.add('active');
-                    
                     child.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             });
         }
         
-        
         function openShepherdModal(e) {
             e.stopPropagation();
             openModal('shepherd-modal');
-            
-            
-            updateShepherdModeTitles();
-            
-
             shepherdSearchInput.value = ''; 
-            
-            
             
             if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
                 renderShepherdList([]); 
@@ -2656,19 +2755,14 @@
             }
 
             let songsToShow = [];
-            
             if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
-                
-                songsToShow = shepherdSongs.filter(song => 
-                    userPlaylist.hymns.includes(song.title)
-                );
+                songsToShow = shepherdSongs.filter(song => userPlaylist.hymns.includes(song.title));
             } else {
-                
                 songsToShow = shepherdSongs;
             }
             
+            updateShepherdModeTitles();
             renderShepherdList(songsToShow);
-            
             
             if (songsToShow.length > 0) {
                 displayShepherdSong(songsToShow[0]);
@@ -2681,71 +2775,221 @@
             }, 300);
         }
 
+        /* GITAR MODU LOGIC (Duplicates logic but targets Guitar Mode elements)
+        */
+
+        function renderGuitarModeList(songsToRender) {
+            guitarModeSongList.innerHTML = '';
+            
+            if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
+                guitarModeSongList.innerHTML = '<li class="p-3 text-red-400 text-center">Hata: Veri yüklenemedi.</li>';
+                return;
+            }
+
+            if (songsToRender.length === 0) {
+                guitarModeSongList.innerHTML = '<li class="p-3 text-text-subtle text-center">Sonuç bulunamadı.</li>';
+                return;
+            }
+
+            songsToRender.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+
+            songsToRender.forEach((song) => {
+                const li = document.createElement('li');
+                li.className = 'p-3 hover:bg-primary-bg cursor-pointer rounded-md text-text-light transition-colors';
+                li.textContent = song.title;
+                li.onclick = () => displayGuitarModeSong(song);
+                
+                if (currentGuitarModeSong && currentGuitarModeSong.title === song.title) {
+                    li.classList.add('active');
+                }
+                guitarModeSongList.appendChild(li);
+            });
+        }
+
+        function displayGuitarModeSong(song) {
+            if (!song) {
+                currentGuitarModeSong = null;
+                guitarModeSongTitle.textContent = 'İlahi Seçilmedi';
+                guitarModeSongMeta.textContent = '...';
+                guitarModeLyricsContent.innerHTML = `
+                    <div class="shepherd-empty-state">
+                        <p>Başlamak için soldaki listeden bir ilahi seçin.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            currentGuitarModeSong = song;
+            guitarModeSongTitle.textContent = song.title;
+            
+            let metaText = '';
+            if (song.author) metaText += `Yazar: ${song.author}`;
+            if (song.key) metaText += metaText ? ` | Ton: ${song.key}` : `Ton: ${song.key}`;
+            if (song.tempo) metaText += metaText ? ` | Tempo: ${song.tempo}` : `Tempo: ${song.tempo}`;
+            
+            guitarModeSongMeta.textContent = metaText || 'Bilgi yok';
+            
+            guitarModeLyricsContent.innerHTML = '';
+            let currentSection = '';
+
+            song.lyrics.forEach(line => {
+                if (line.section && line.section !== currentSection) {
+                    currentSection = line.section;
+                    const sectionTitle = document.createElement('div');
+                    sectionTitle.className = 'shepherd-section-title';
+                    sectionTitle.textContent = currentSection; 
+                    guitarModeLyricsContent.appendChild(sectionTitle);
+                }
+                
+                const lineContainer = document.createElement('div');
+                lineContainer.className = 'mb-3';
+                
+                if (line.chord && Array.isArray(line.chord) && line.chord.length > 0) {
+                    const chordEl = document.createElement('div');
+                    chordEl.className = 'shepherd-chord-line';
+                    chordEl.textContent = line.chord.join(' '); 
+                    lineContainer.appendChild(chordEl);
+                }
+                
+                if (line.line && line.line.trim()) {
+                    const lineEl = document.createElement('div');
+                    lineEl.className = 'shepherd-lyric-line';
+                    lineEl.textContent = line.line;
+                    lineContainer.appendChild(lineEl);
+                } else if (!line.chord || line.chord.length === 0) {
+                    const emptyLine = document.createElement('div');
+                    emptyLine.className = 'shepherd-lyric-line';
+                    emptyLine.innerHTML = '&nbsp;';
+                    lineContainer.appendChild(emptyLine);
+                }
+                
+                if (lineContainer.children.length > 0) {
+                    guitarModeLyricsContent.appendChild(lineContainer);
+                }
+            });
+
+            guitarModeDisplay.scrollTop = 0;
+
+            Array.from(guitarModeSongList.children).forEach(child => {
+                child.classList.remove('active');
+                if (child.textContent === song.title) {
+                    child.classList.add('active');
+                    child.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+
+        const debouncedGuitarSearch = debounce((filter = '') => {
+            const subtitleEl = document.getElementById('guitar-mode-list-subtitle');
+            if (subtitleEl) subtitleEl.textContent = filter ? `"${filter}" sonuçları` : (userPlaylist.hymns && userPlaylist.hymns.length > 0 ? 'Çalma Listeniz' : 'Tüm İlahiler');
+
+            const normalizedFilter = shepherd_normalize(filter);
+
+            if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
+                renderGuitarModeList([]); 
+                return;
+            }
+
+            if (!normalizedFilter) {
+                let defaultSongs = [];
+                if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
+                    defaultSongs = shepherdSongs.filter(song => userPlaylist.hymns.includes(song.title));
+                } else {
+                    defaultSongs = shepherdSongs;
+                }
+                renderGuitarModeList(defaultSongs);
+                if (defaultSongs.length > 0 && !currentGuitarModeSong) displayGuitarModeSong(defaultSongs[0]);
+                return;
+            }
+
+            const filteredSongs = shepherdSongs.filter(song => {
+                const normalizedTitle = shepherd_normalize(song.title);
+                const normalizedLyrics = song.lyrics.map(l => shepherd_normalize(l.line)).join(' ');
+                return normalizedTitle.includes(normalizedFilter) || normalizedLyrics.includes(normalizedFilter);
+            });
+
+            renderGuitarModeList(filteredSongs);
+            if (filteredSongs.length > 0) displayGuitarModeSong(filteredSongs[0]);
+        }, 300);
+
+        function openGuitarMode(e) {
+            e.stopPropagation();
+            openModal('guitar-mode-modal');
+            guitarModeSearchInput.value = '';
+            
+            // Re-use data from shepherdSongs
+            if (typeof shepherdSongs === 'undefined' || shepherdSongs.length === 0) {
+                renderGuitarModeList([]);
+                displayGuitarModeSong(null);
+                return;
+            }
+
+            let songsToShow = [];
+            if (userPlaylist.hymns && userPlaylist.hymns.length > 0) {
+                songsToShow = shepherdSongs.filter(song => userPlaylist.hymns.includes(song.title));
+            } else {
+                songsToShow = shepherdSongs;
+            }
+            
+            const subtitleEl = document.getElementById('guitar-mode-list-subtitle');
+            if (subtitleEl) subtitleEl.textContent = (userPlaylist.hymns && userPlaylist.hymns.length > 0 ? 'Çalma Listeniz' : 'Tüm İlahiler');
+            
+            renderGuitarModeList(songsToShow);
+            if (songsToShow.length > 0) displayGuitarModeSong(songsToShow[0]);
+            
+            // Draw the initial compact gauge
+            setTimeout(() => {
+                 guitarModeSearchInput.focus();
+                 drawTunerGauge(); 
+            }, 300);
+        }
+
         
         function initShepherdMode() {
             document.getElementById('shepherd-mode-btn').addEventListener('click', openShepherdModal);
             document.getElementById('close-shepherd-modal').addEventListener('click', () => closeModal('shepherd-modal'));
-            
-            
             shepherdSearchInput.addEventListener('input', (e) => debouncedSearchHandler(e.target.value));
 
-            
-            const togglePaneBtn = document.getElementById('toggle-shepherd-list-pane');
-            const modalBody = shepherdModal.querySelector('.modal-body');
-            const toggleIcon = togglePaneBtn.querySelector('svg');
-            const searchContainer = document.getElementById('shepherd-search-container');
+            // Guitar Mode Listeners
+            document.getElementById('guitar-mode-btn').addEventListener('click', openGuitarMode);
+            document.getElementById('close-guitar-mode-modal').addEventListener('click', () => closeModal('guitar-mode-modal'));
+            guitarModeSearchInput.addEventListener('input', (e) => debouncedGuitarSearch(e.target.value));
 
-            if (togglePaneBtn && modalBody && toggleIcon) {
-                
-                togglePaneBtn.addEventListener('click', (e) => { 
-                    e.stopPropagation(); 
-                    
-                    // Optimize animation triggering
-                    requestAnimationFrame(() => {
-                        modalBody.classList.toggle('shepherd-list-hidden');
-                        const isHidden = modalBody.classList.contains('shepherd-list-hidden');
-                        
-                        // Toggle search container visibility with animation class instead of display:none
-                        if (searchContainer) {
-                            if (isHidden) {
-                                searchContainer.classList.add('hidden-search');
-                            } else {
-                                searchContainer.classList.remove('hidden-search');
-                            }
-                        }
-    
-                        togglePaneBtn.title = isHidden ? "Listeyi Göster" : "Listeyi Gizle";
-                        
-                        if (isHidden) {
-                            
-                            toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="14" x2="19" y1="9" y2="9"/><line x1="14" x2="19" y1="15" y2="15"/>';
-                        } else {
-                            
-                            toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/>';
-                        }
-                    });
-                });
-            }
-            
-            
-            
+            // Pane Toggles
+            setupPaneToggle('toggle-shepherd-list-pane', 'shepherd-modal', 'shepherd-search-container');
+            setupPaneToggle('toggle-guitar-mode-list-pane', 'guitar-mode-modal', 'guitar-mode-search-container');
+
             document.addEventListener('keydown', (e) => {
-                if (shepherdModal.classList.contains('visible')) {
-                    
-                    if (e.key === 'Escape') {
-                        closeModal('shepherd-modal');
-                    }
-                    
-                    
-                    if (e.ctrlKey && (e.key === 'f' || e.key === 'F')) {
-                        e.preventDefault();
-                        shepherdSearchInput.focus();
-                        shepherdSearchInput.select();
-                    }
-                }
+                if (shepherdModal.classList.contains('visible') && e.key === 'Escape') closeModal('shepherd-modal');
+                if (guitarModeModal.classList.contains('visible') && e.key === 'Escape') closeModal('guitar-mode-modal');
             });
         }
         
+        function setupPaneToggle(btnId, modalId, searchContainerId) {
+            const togglePaneBtn = document.getElementById(btnId);
+            const modalBody = document.getElementById(modalId)?.querySelector('.modal-body');
+            const searchContainer = document.getElementById(searchContainerId);
+            const toggleIcon = togglePaneBtn?.querySelector('svg');
+
+            if (togglePaneBtn && modalBody && toggleIcon) {
+                togglePaneBtn.addEventListener('click', (e) => { 
+                    e.stopPropagation(); 
+                    requestAnimationFrame(() => {
+                        modalBody.classList.toggle('list-hidden');
+                        const isHidden = modalBody.classList.contains('list-hidden');
+                        
+                        if (searchContainer) {
+                            if (isHidden) searchContainer.classList.add('hidden-search');
+                            else searchContainer.classList.remove('hidden-search');
+                        }
+    
+                        togglePaneBtn.title = isHidden ? "Listeyi Göster" : "Listeyi Gizle";
+                        if (isHidden) toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="14" x2="19" y1="9" y2="9"/><line x1="14" x2="19" y1="15" y2="15"/>';
+                        else toggleIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/>';
+                    });
+                });
+            }
+        }
 
         async function initializeApp() {
             showLoader();
@@ -2770,13 +3014,11 @@
                 copyPlaylistLinkBtn.addEventListener('click', copyPlaylistLink);
                 clearPlaylistBtn.addEventListener('click', clearPlaylist);
                 
-                // Add event listener for QR code
                 showQrCodeBtn.addEventListener('click', openQrCodeModal);
 
                 guitarTunerBtn.addEventListener('click', openGuitarTunerModal);
                 startTunerBtn.addEventListener('click', startTuner);
 
-                // Add scroll listener for floating buttons
                 lyricsScrollContainer.addEventListener('scroll', toggleFloatingButtons);
                 window.addEventListener('scroll', toggleFloatingButtons);
 
