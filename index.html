@@ -1113,12 +1113,13 @@
             margin-bottom: 0.25rem;
             line-height: 1.5;
             min-height: 1.5em; /* Keep height even if empty */
+            white-space: pre-wrap; /* Preserve spacing for layout */
         }
 
         .guitar-chord {
             display: inline-block;
             transition: all 0.2s;
-            padding: 0 0.25rem;
+            padding: 0;
             border-radius: 4px;
         }
 
@@ -1139,6 +1140,7 @@
             color: #e5e5e5;
             margin-bottom: 2rem;
             line-height: 1.4;
+            white-space: pre-wrap;
         }
 
         .guitar-controls {
@@ -2595,78 +2597,81 @@
             let currentSection = '';
 
             currentShepherdSong.lyrics.forEach(line => {
-                // 1. SECTION HEADER
+                
+                // Section Logic (Matches Shepherd Mode)
                 if (line.section && line.section !== currentSection) {
                     currentSection = line.section;
-                    const sectionTitle = document.createElement('div');
-                    sectionTitle.className = 'text-red-400 font-bold text-xl mt-8 mb-4 border-t border-gray-800 pt-4';
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = "w-full text-left border-b border-gray-700 mt-6 mb-3 pb-1";
+                    const sectionTitle = document.createElement('h3');
+                    sectionTitle.className = "text-red-400 font-bold text-lg";
                     sectionTitle.textContent = currentSection;
-                    guitarSongContainer.appendChild(sectionTitle);
+                    sectionDiv.appendChild(sectionTitle);
+                    guitarSongContainer.appendChild(sectionDiv);
                 }
 
                 const div = document.createElement('div');
-                div.className = "mb-6 text-center";
+                div.className = "mb-4 text-center"; // Ensure centering for prompter feel
 
-                // 2. CHORDS
-                if (line.chord && Array.isArray(line.chord) && line.chord.length > 0) {
+                // 1. Chords Line
+                if (line.chord && line.chord.length > 0) {
                     const chordDiv = document.createElement('div');
                     chordDiv.className = "guitar-chord-line";
                     
-                    line.chord.forEach((chordStr, index) => {
-                         if (index > 0) chordDiv.appendChild(document.createTextNode(' '));
-                         
-                         // Handle spacing/empty strings in array if any
-                         if(!chordStr.trim()) {
-                             chordDiv.appendChild(document.createTextNode(chordStr));
-                             return;
-                         }
-                         
-                         let transposedChord = transposeChord(chordStr, currentTransposition);
-                         let root = getChordRoot(transposedChord);
-                         
-                         const span = document.createElement('span');
-                         span.className = "guitar-chord cursor-pointer hover:text-white transition-colors";
-                         span.textContent = transposedChord;
-                         span.dataset.root = root;
-                         
-                         // Click to set current position manually
-                         span.onclick = (e) => {
-                             e.stopPropagation();
-                             guitarSongEvents.forEach(ev => {
-                                 ev.element.classList.remove('active', 'pending');
-                                 ev.isPlayed = false;
-                             });
-                             const idx = guitarSongEvents.findIndex(ev => ev.element === span);
-                             if(idx !== -1) {
-                                 currentEventIndex = idx;
-                                 span.classList.add('pending');
-                             }
-                         };
-                         
-                         guitarSongEvents.push({ element: span, chordRoot: root, isPlayed: false });
-                         chordDiv.appendChild(span);
+                    const originalLine = line.chord.join(' ');
+                    
+                    // Custom parsing to create interactive elements and event list
+                    let parts = originalLine.split(/(\s+)/); 
+                    
+                    parts.forEach(part => {
+                        if (part.trim() === "") {
+                            // Whitespace - use pre-wrap to preserve spacing
+                            const space = document.createElement('span');
+                            space.style.whiteSpace = "pre";
+                            space.textContent = part;
+                            chordDiv.appendChild(space);
+                        } else {
+                            // Potential Chord
+                            let transposedChord = transposeChord(part, currentTransposition);
+                            let root = getChordRoot(transposedChord);
+                            
+                            const span = document.createElement('span');
+                            span.className = "guitar-chord";
+                            span.textContent = transposedChord;
+                            span.dataset.root = root;
+                            
+                            // Add to event sequence
+                            guitarSongEvents.push({
+                                element: span,
+                                chordRoot: root,
+                                isPlayed: false
+                            });
+                            
+                            chordDiv.appendChild(span);
+                        }
                     });
 
                     div.appendChild(chordDiv);
                 }
 
-                // 3. LYRICS
-                if (line.line && line.line.trim()) {
+                // 2. Lyrics Line
+                if (line.line) {
                     const lyricDiv = document.createElement('div');
                     lyricDiv.className = "guitar-lyric-line";
                     lyricDiv.textContent = line.line;
                     div.appendChild(lyricDiv);
-                } else if ((!line.chord || line.chord.length === 0)) {
-                    // Empty line to match Shepherd mode spacing
-                    const emptyDiv = document.createElement('div');
-                    emptyDiv.className = "guitar-lyric-line";
-                    emptyDiv.innerHTML = "&nbsp;";
-                    div.appendChild(emptyDiv);
+                } else if (!line.chord || line.chord.length === 0) {
+                    // Empty spacer line (matches shepherd logic)
+                    const spacer = document.createElement('div');
+                    spacer.className = "guitar-lyric-line";
+                    spacer.innerHTML = "&nbsp;";
+                    div.appendChild(spacer);
                 }
 
                 guitarSongContainer.appendChild(div);
             });
             
+            // Mark the first chord as pending if exists
             if (guitarSongEvents.length > 0) {
                 guitarSongEvents[0].element.classList.add('pending');
             }
