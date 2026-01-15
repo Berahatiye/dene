@@ -259910,8 +259910,7 @@ const shepherdSongs = [
             },
             {
                 "section": "V2",
-                "chord": [
-                    "Em        C"
+                "chord": [ "Em        C"
                 ],
                 "line": "Kişiye ne mutlu!"
             },
