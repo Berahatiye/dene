@@ -259830,5 +259830,91 @@ const shepherdSongs = [
                 "line": "   Rabbi daha istiyorum"
             }
         ]
+    },
+
+
+    {
+        "title": "Rab'bin Yasasından Sürekli Zevk Alır",
+        "author": "Artun Tokatlı",
+        "key": "G",
+        "lyrics": [
+            {
+                "section": "V1",
+                "chord": [
+                    "G      c     D"
+                ],
+                "line": "Kötüleri dinlemeyen"
+            },
+            {
+                "section": "V1",
+                "chord": [
+                    "G        c    D"
+                ],
+                "line": "Günahkarla yürümeyen"
+            },
+            {
+                "section": "V1",
+                "chord": [
+                    "G       C   D"
+                ],
+                "line": "Alaycıyla oturmayan"
+            },
+            {
+                "section": "V1",
+                "chord": [
+                    "    Em        C"
+                ],
+                "line": "Kişiye ne mutlu!"
+            },
+            {
+                "section": "C1",
+                "chord": [
+                    "     G                  C       D"
+                ],
+                "line": "// Rab'bin yasasından sürekli zevk alır"
+            },
+            {
+                "section": "C1",
+                "chord": [
+                    "  G                   C       D          (C)"
+                ],
+                "line": "Gece gündüz her gün sürekli düşünür //"
+            },
+            {
+                "section": "C1",
+                "chord": [
+                    "  Am      D       G"
+                ],
+                "line": "Yaprağı hiç solmaz."
+            },
+            {
+                "section": "V2",
+                "chord": [
+                    "G       C     D"
+                ],
+                "line": "Fırtınada savrulmayan"
+            },
+            {
+                "section": "V2",
+                "chord": [
+                    "G       C          D"
+                ],
+                "line": "Yargılanınca hemen aklanan"
+            },
+            {
+                "section": "V2",
+                "chord": [
+                    "G       C      D"
+                ],
+                "line": "Mevsiminde meyve veren"
+            },
+            {
+                "section": "V2",
+                "chord": [
+                    "    Em        C"
+                ],
+                "line": "Kişiye ne mutlu!"
+            },
+        ]
     }
 ];
