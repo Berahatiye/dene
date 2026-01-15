@@ -259869,21 +259869,21 @@ const shepherdSongs = [
             {
                 "section": "C1",
                 "chord": [
-                    "     G                  C       D"
+                    "   G                  C       D"
                 ],
                 "line": "// Rab'bin yasasından sürekli zevk alır"
             },
             {
                 "section": "C1",
                 "chord": [
-                    "  G                   C       D          (C)"
+                    "G                   C       D         (C)"
                 ],
                 "line": "Gece gündüz her gün sürekli düşünür //"
             },
             {
                 "section": "C1",
                 "chord": [
-                    "  Am      D       G"
+                    "Am      D       G"
                 ],
                 "line": "Yaprağı hiç solmaz."
             },
@@ -259909,8 +259909,9 @@ const shepherdSongs = [
                 "line": "Mevsiminde meyve veren"
             },
             {
-                "section": "V2",
-                "chord": [ "Em        C"
+                "section": "V2'",
+                "chord": [
+                    "    Em        C"
                 ],
                 "line": "Kişiye ne mutlu!"
             },
